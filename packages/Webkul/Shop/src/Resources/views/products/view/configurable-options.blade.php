@@ -105,7 +105,7 @@
                 },
 
                 created: function () {
-                    this.galleryImages = galleryImages.slice(0)
+                    this.galleryImages = galleryImages.slice(0);
 
                     var config = @json($config);
 
@@ -142,9 +142,8 @@
 
                     for (const [key, value] of url.searchParams.entries()) {
                         // handle the case of <select>:
-                        element = document.querySelectorAll('select[data-attribute-label="' + key + '"]');
-                        if (element.length > 0) {
-                            element = element[0];
+                        element = document.querySelector('select[data-attribute-label="' + key + '"]');
+                        if (element) {
                             for (var i = 0; i < element.options.length; i++) {
                                 if (element.options[i].text.toLowerCase() == value) {
                                     element.selectedIndex = i;
@@ -154,9 +153,8 @@
                         }
 
                         // handle the case of swatch:
-                        element = document.querySelectorAll('input[data-attribute-value="' + value + '"]');
-                        if (element.length > 0) {
-                            element = element[0];
+                        element = document.querySelector('input[data-attribute-value="' + value + '"]');
+                        if (element) {
                             element.click();
                         }
                     }
