@@ -2,9 +2,11 @@
 
     @inject ('configurableOptionHelper', 'Webkul\Product\Helpers\ConfigurableOption')
 
+    <?php $config = $configurableOptionHelper->getConfigurationConfig($product) ?>
+
     {!! view_render_event('bagisto.shop.products.view.configurable-options.before', ['product' => $product]) !!}
 
-    <product-options></product-options>
+    <product-options variants='@json($config)'></product-options>
 
     {!! view_render_event('bagisto.shop.products.view.configurable-options.after', ['product' => $product]) !!}
 
@@ -20,23 +22,23 @@
                      :class="[errors.has('super_attribute[' + attribute.id + ']') ? 'has-error' : '']">
                     <label class="required">@{{ attribute.label }}</label>
 
-                    <span v-if="! attribute.swatch_type || attribute.swatch_type == '' || attribute.swatch_type == 'dropdown'">
+                    <span
+                        v-if="! attribute.swatch_type || attribute.swatch_type == '' || attribute.swatch_type == 'dropdown'">
                         <select
-                                class="control testclass"
-                                v-validate="'required'"
-                                :name="['super_attribute[' + attribute.id + ']']"
-                                :disabled="attribute.disabled"
-                                @change="configure(attribute, $event.target.value)"
-                                :id="['attribute_' + attribute.id]"
-                                :data-vv-as="'&quot;' + attribute.label + '&quot;'"
-                                :data-attribute-label="attribute.label.toLowerCase()"
+                            class="control testclass"
+                            v-validate="'required'"
+                            :name="['super_attribute[' + attribute.id + ']']"
+                            :disabled="attribute.disabled"
+                            @change="configure(attribute, $event.target.value)"
+                            :id="['attribute_' + attribute.id]"
+                            :data-vv-as="'&quot;' + attribute.label + '&quot;'"
+                            :data-attribute-label="attribute.label.toLowerCase()"
                         >
 
                             <option v-for='(option, index) in attribute.options'
                                     :value="option.id"
                                     :selected="isPreselected(attribute.value, option.label)"
-                                    >@{{ option.label }}</option>
-
+                            >@{{ option.label }}</option>
                         </select>
                     </span>
 
@@ -63,8 +65,8 @@
                             <img v-if="attribute.swatch_type == 'image'" :src="option.swatch_value"/>
 
                             <span
-                                    :data-attribute-value="option.label.toLowerCase()"
-                                    v-if="attribute.swatch_type == 'text'">
+                                :data-attribute-value="option.label.toLowerCase()"
+                                v-if="attribute.swatch_type == 'text'">
                                 @{{ option.label }}
                             </span>
 
@@ -82,8 +84,6 @@
             </div>
         </script>
 
-        <?php $config = $configurableOptionHelper->getConfigurationConfig($product) ?>
-
         <script>
 
             Vue.component('product-options', {
@@ -92,10 +92,15 @@
 
                 inject: ['$validator'],
 
+                props: {
+                    variants: {
+                        type: Object,
+                        required: true,
+                    },
+                },
+
                 data: function () {
                     return {
-                        config: @json($config),
-
                         childAttributes: [],
 
                         selectedProductId: '',
@@ -120,8 +125,6 @@
                 created: function () {
                     this.galleryImages = galleryImages.slice(0);
 
-                    var config = @json($config);
-
                     var childAttributes = this.childAttributes,
                         attributes = config.attributes.slice(),
                         index = attributes.length,
@@ -134,7 +137,7 @@
                         attribute = attributes[index];
 
                         attribute.options = [];
-                        
+
                         attribute = Object.assign(attribute, {
                             childAttributes: childAttributes.slice(),
                             prevAttribute: attributes[index - 1],
@@ -148,7 +151,7 @@
                         }
 
                         if (url.searchParams.has(attribute.code)) {
-                            
+
                             let attributeCode = url.searchParams.get(attribute.code).toLowerCase();
                             let attributeValue = attribute.options.find(option => option.label.toLowerCase() == attributeCode);
                             if (attributeValue) {
@@ -246,7 +249,7 @@
                             if (option.id == value) {
                                 selectedIndex = index;
                             }
-                        })
+                        });
 
                         return selectedIndex;
                     },
