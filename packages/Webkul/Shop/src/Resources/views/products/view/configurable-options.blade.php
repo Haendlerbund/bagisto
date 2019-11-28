@@ -2,11 +2,18 @@
 
     @inject ('configurableOptionHelper', 'Webkul\Product\Helpers\ConfigurableOption')
 
-    <?php $config = $configurableOptionHelper->getConfigurationConfig($product) ?>
+    <?php
+
+    /** @var \Webkul\Product\Models\Product $product */
+    /** @var \Webkul\Product\Helpers\ConfigurableOption $configurableOptionHelper */
+
+    $config = $configurableOptionHelper->getVariantsConfig($product)
+
+    ?>
 
     {!! view_render_event('bagisto.shop.products.view.configurable-options.before', ['product' => $product]) !!}
 
-    <product-options variants='@json($config)'></product-options>
+    <product-options config='@json($config)'></product-options>
 
     {!! view_render_event('bagisto.shop.products.view.configurable-options.after', ['product' => $product]) !!}
 
@@ -39,6 +46,7 @@
                                     :value="option.id"
                                     :selected="isPreselected(attribute.value, option.label)"
                             >@{{ option.label }}</option>
+
                         </select>
                     </span>
 
@@ -93,7 +101,7 @@
                 inject: ['$validator'],
 
                 props: {
-                    variants: {
+                    config: {
                         type: Object,
                         required: true,
                     },
