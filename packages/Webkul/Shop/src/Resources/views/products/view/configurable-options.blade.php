@@ -22,7 +22,7 @@
 
                     <span v-if="! attribute.swatch_type || attribute.swatch_type == '' || attribute.swatch_type == 'dropdown'">
                         <select
-                                class="control"
+                                class="control testclass"
                                 v-validate="'required'"
                                 :name="['super_attribute[' + attribute.id + ']']"
                                 :disabled="attribute.disabled"
@@ -33,7 +33,9 @@
                         >
 
                             <option v-for='(option, index) in attribute.options'
-                                    :value="option.id">@{{ option.label }}</option>
+                                    :value="option.id"
+                                    :selected="isPreselected(attribute.value, option.label)"
+                                    >@{{ option.label }}</option>
 
                         </select>
                     </span>
@@ -104,8 +106,19 @@
                     }
                 },
 
+                computed: {
+                    searchParams: function () {
+                        url = new URL(window.location.href);
+                        return url.searchParams.entries();
+                    },
+
+                    attributes: function () {
+                        return this.config.attributes.slice();
+                    },
+                },
+
                 created: function () {
-                    this.galleryImages = galleryImages.slice(0)
+                    this.galleryImages = galleryImages.slice(0);
 
                     var config = @json($config);
 
@@ -114,22 +127,42 @@
                         index = attributes.length,
                         attribute;
 
+                    var url = new URL(window.location.href);
+                    var params = url.searchParams.entries();
+
                     while (index--) {
                         attribute = attributes[index];
 
                         attribute.options = [];
-
-                        if (index) {
-                            attribute.disabled = true;
-                        } else {
-                            this.fillSelect(attribute);
-                        }
-
+                        
                         attribute = Object.assign(attribute, {
                             childAttributes: childAttributes.slice(),
                             prevAttribute: attributes[index - 1],
                             nextAttribute: attributes[index + 1]
                         });
+
+                        if (index && attribute.prevAttribute.value == '') {
+                            attribute.disabled = true;
+                        } else {
+                            this.fillSelect(attribute);
+                        }
+
+                        if (url.searchParams.has(attribute.code)) {
+                            
+                            let attributeCode = url.searchParams.get(attribute.code).toLowerCase();
+                            let attributeValue = attribute.options.find(option => option.label.toLowerCase() == attributeCode);
+                            if (attributeValue) {
+                                attribute.value = attributeValue.label;
+                            }
+
+                            if (attribute.nextAttribute) {
+                                this.fillSelect(attribute.nextAttribute);
+                            }
+                            // this.fillSelect(attribute.nextAttribute);
+                            // console.log('attribute', attribute);
+                            // console.log('attributeOptions', attribute.options.find());
+                            // attribute.value = attribute.id;
+                        }
 
                         childAttributes.unshift(attribute);
 
@@ -137,32 +170,47 @@
                 },
 
                 mounted: function () {
+
                     // preselect items with values from url (e.g. GET params like ?color=green&size=xs)
-                    url = new URL(window.location.href);
+                    // url = new URL(window.location.href);
 
-                    for (const [key, value] of url.searchParams.entries()) {
-                        // handle the case of <select>:
-                        element = document.querySelectorAll('select[data-attribute-label="' + key + '"]');
-                        if (element.length > 0) {
-                            element = element[0];
-                            for (var i = 0; i < element.options.length; i++) {
-                                if (element.options[i].text.toLowerCase() == value) {
-                                    element.selectedIndex = i;
-                                    break;
-                                }
-                            }
-                        }
+                    // for (const [key, value] of url.searchParams.entries()) {
+                    //     // handle the case of <select>:
+                    //     element = document.querySelector('select[data-attribute-label="' + key + '"]');
+                    //     if (element) {
+                    //         for (var i = 0; i < element.options.length; i++) {
+                    //             if (element.options[i].text.toLowerCase() == value) {
+                    //                 element.selectedIndex = i;
+                    //                 break;
+                    //             }
+                    //         }
+                    //     }
 
-                        // handle the case of swatch:
-                        element = document.querySelectorAll('input[data-attribute-value="' + value + '"]');
-                        if (element.length > 0) {
-                            element = element[0];
-                            element.click();
-                        }
-                    }
+                    //     // handle the case of swatch:
+                    //     element = document.querySelector('input[data-attribute-value="' + value + '"]');
+                    //     if (element) {
+                    //         element = element[0];
+                    //         element.click();
+                    //     }
+                    // }
                 },
 
                 methods: {
+                    isPreselected: function (attributeValue, optionLabel) {
+                        let isSelected = false;
+
+                        console.log('attributeValue', attributeValue);
+                        console.log('optionLabel', optionLabel);
+
+                        if (attributeValue != '') {
+                            if (attributeValue === optionLabel) {
+                                isSelected = true;
+                            }
+                        }
+
+                        return isSelected;
+                    },
+
                     configure: function (attribute, value) {
                         this.simpleProduct = this.getSelectedProductId(attribute, value);
 
