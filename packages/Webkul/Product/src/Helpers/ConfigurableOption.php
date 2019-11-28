@@ -29,6 +29,11 @@ class ConfigurableOption extends AbstractProduct
     protected $productImage;
 
     /**
+     * @var array
+     */
+    protected $preselection;
+
+    /**
      * Create a new controller instance.
      *
      * @param Webkul\Attribute\Repositories\AttributeOptionRepository $attributeOption
@@ -44,6 +49,8 @@ class ConfigurableOption extends AbstractProduct
         $this->attributeOption = $attributeOption;
 
         $this->productImage = $productImage;
+
+        $this->preselection = request()->all();
     }
 
     /**
@@ -104,7 +111,7 @@ class ConfigurableOption extends AbstractProduct
      *
      * @return object
      */
-    public function getAllowAttributes(ProductFlat $product): ?object
+    public function getAllowedAttributes(ProductFlat $product): ?object
     {
         return $product->product->super_attributes;
     }
@@ -121,7 +128,7 @@ class ConfigurableOption extends AbstractProduct
     {
         $options = [];
 
-        $allowAttributes = $this->getAllowAttributes($currentProduct);
+        $allowAttributes = $this->getAllowedAttributes($currentProduct);
 
         foreach ($allowedProducts as $product) {
             if ($product instanceof ProductFlat) {
@@ -161,7 +168,7 @@ class ConfigurableOption extends AbstractProduct
 
         $attributes = [];
 
-        $allowAttributes = $this->getAllowAttributes($product);
+        $allowAttributes = $this->getAllowedAttributes($product);
 
         foreach ($allowAttributes as $attribute) {
 
@@ -189,7 +196,7 @@ class ConfigurableOption extends AbstractProduct
      *
      * @return array
      */
-    protected function getAttributeOptionsData($attribute, $options): array
+    protected function getAttributeOptionsData($attribute, array $options): array
     {
         $attributeOptionsData = [];
 
@@ -201,6 +208,7 @@ class ConfigurableOption extends AbstractProduct
                 $attributeOptionsData[] = [
                     'id'           => $optionId,
                     'label'        => $attributeOption->label,
+                    'selected'     => $this->isPreselected($attribute->code, $attributeOption->label),
                     'swatch_value' => $attribute->swatch_type == 'image'
                         ? $attributeOption->swatch_value_url
                         : $attributeOption->swatch_value,
@@ -210,6 +218,26 @@ class ConfigurableOption extends AbstractProduct
         }
 
         return $attributeOptionsData;
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     *
+     * @return bool
+     */
+    protected function isPreselected(string $key, string $value): bool
+    {
+        $key = trim(strtolower($key));
+        $value = trim(strtolower($value));
+
+        if (array_key_exists($key, $this->preselection)) {
+            if ($this->preselection[$key] === $value) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
