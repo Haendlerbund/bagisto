@@ -231,13 +231,7 @@ class ConfigurableOption extends AbstractProduct
         $key = trim(strtolower($key));
         $value = trim(strtolower($value));
 
-        if (array_key_exists($key, $this->preselection)) {
-            if ($this->preselection[$key] === $value) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_key_exists($key, $this->preselection) && $this->preselection[$key] === $value;
     }
 
     /**
