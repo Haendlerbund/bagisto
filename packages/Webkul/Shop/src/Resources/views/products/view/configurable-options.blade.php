@@ -7,14 +7,14 @@
     /** @var \Webkul\Product\Models\Product $product */
     /** @var \Webkul\Product\Helpers\ConfigurableOption $configurableOptionHelper */
 
-    $variants = $configurableOptionHelper->getVariantsConfig($product)
+    $config = $configurableOptionHelper->getVariantsConfig($product)
 
 
     ?>
 
     {!! view_render_event('bagisto.shop.products.view.configurable-options.before', ['product' => $product]) !!}
 
-    <product-options :variants='@json($variants)' inline-template>
+    <product-options :config='@json($config)' inline-template>
         <div class="attributes">
 
             <input

@@ -3,53 +3,52 @@ export default {
 
   inject: ['$validator'],
 
-  data: function() {
+  data() {
     return {
-      childAttributes: [],
-
       selectedProductId: '',
-
       simpleProduct: null,
-
-      galleryImages: []
     }
   },
 
   props: {
-    variants: {
+    config: {
       type: Object,
       required: true,
     },
   },
 
-  created: function() {
+  computed: {
+    childAttributes() {
+      let childAttributes = [];
+      let { attributes } = this.config;
+      let index = attributes.length;
 
-    this.galleryImages = galleryImages.slice(0)
+      while (index--) {
+        let attribute = {
+          ...attributes[index],
+          options: [],
+        };
 
-    var childAttributes = this.childAttributes,
-      attributes = this.variants.attributes.slice(),
-      index = attributes.length,
-      attribute;
+        if (index) {
+          attribute.disabled = true;
+        } else {
+          this.fillSelect(attribute);
+        }
 
-    while (index--) {
-      attribute = attributes[index];
+        attribute = Object.assign(attribute, {
+          childAttributes: childAttributes.slice(),
+          prevAttribute: attributes[index - 1],
+          nextAttribute: attributes[index + 1]
+        });
 
-      attribute.options = [];
-
-      if (index) {
-        attribute.disabled = true;
-      } else {
-        this.fillSelect(attribute);
+        childAttributes.unshift(attribute);
       }
 
-      attribute = Object.assign(attribute, {
-        childAttributes: childAttributes.slice(),
-        prevAttribute: attributes[index - 1],
-        nextAttribute: attributes[index + 1]
-      });
-
-      childAttributes.unshift(attribute);
-    }
+      return childAttributes;
+    },
+    galleryImages() {
+      return window.galleryImages.slice(0) || [];
+    },
   },
 
   methods: {
@@ -118,7 +117,7 @@ export default {
 
       this.clearSelect(attribute)
 
-      attribute.options = [{'id': '', 'label': this.variants.chooseText, 'products': []}];
+      attribute.options = [{'id': '', 'label': this.config.chooseText, 'products': []}];
 
       if (attribute.prevAttribute) {
         prevOption = attribute.prevAttribute.options[attribute.prevAttribute.selectedIndex];
@@ -158,7 +157,7 @@ export default {
       }
     },
 
-    clearSelect: function (attribute) {
+    clearSelect(attribute) {
       if (! attribute)
         return;
 
@@ -179,11 +178,11 @@ export default {
       }
     },
 
-    getAttributeOptions: function (attributeId) {
+    getAttributeOptions(attributeId) {
       var this_this = this,
         options;
 
-      this.variants.attributes.forEach(function(attribute, index) {
+      this.config.attributes.forEach(function(attribute, index) {
         if (attribute.id == attributeId) {
           options = attribute.options;
         }
@@ -192,7 +191,7 @@ export default {
       return options;
     },
 
-    reloadPrice: function () {
+    reloadPrice() {
       var selectedOptionCount = 0;
 
       this.childAttributes.forEach(function(attribute) {
@@ -207,19 +206,19 @@ export default {
       if (this.childAttributes.length == selectedOptionCount) {
         priceLabelElement.style.display = 'none';
 
-        priceElement.innerHTML = this.variants.variant_prices[this.simpleProduct].final_price.formated_price;
+        priceElement.innerHTML = this.config.variant_prices[this.simpleProduct].final_price.formated_price;
 
         eventBus.$emit('configurable-variant-selected-event', this.simpleProduct)
       } else {
         priceLabelElement.style.display = 'inline-block';
 
-        priceElement.innerHTML = this.variants.regular_price.formated_price;
+        priceElement.innerHTML = this.config.regular_price.formated_price;
 
         eventBus.$emit('configurable-variant-selected-event', 0)
       }
     },
 
-    changeProductImages: function () {
+    changeProductImages() {
       galleryImages.splice(0, galleryImages.length)
 
       this.galleryImages.forEach(function(image) {
@@ -227,20 +226,18 @@ export default {
       });
 
       if (this.simpleProduct) {
-        this.variants.variant_images[this.simpleProduct].forEach(function(image) {
+        this.config.variant_images[this.simpleProduct].forEach(function(image) {
           galleryImages.unshift(image)
         });
       }
     },
 
-    changeStock: function (productId) {
+    changeStock(productId) {
       var inStockElement = document.getElementById('in-stock');
-
-      if (productId) {
-        inStockElement.style.display= "block";
-      } else {
-        inStockElement.style.display= "none";
+      if (!inStockElement) {
+        return;
       }
+      inStockElement.style.display = (productId) ? 'block' : 'none';
     },
   }
 }
