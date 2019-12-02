@@ -44,8 +44,7 @@ class ConfigurableOption extends AbstractProduct
     public function __construct(
         AttributeOption $attributeOption,
         ProductImage $productImage
-    )
-    {
+    ) {
         $this->attributeOption = $attributeOption;
 
         $this->productImage = $productImage;
@@ -142,8 +141,9 @@ class ConfigurableOption extends AbstractProduct
 
                 $attributeValue = $product->{$productAttribute->code};
 
-                if ($attributeValue == '' && $product instanceof ProductFlat)
+                if ($attributeValue == '' && $product instanceof ProductFlat) {
                     $attributeValue = $product->product->{$productAttribute->code};
+                }
 
                 $options[$productAttributeId][$attributeValue][] = $productId;
 
@@ -171,7 +171,6 @@ class ConfigurableOption extends AbstractProduct
         $allowAttributes = $this->getAllowedAttributes($product);
 
         foreach ($allowAttributes as $attribute) {
-
             $attributeOptionsData = $this->getAttributeOptionsData($attribute, $options);
 
             if ($attributeOptionsData) {
@@ -201,14 +200,13 @@ class ConfigurableOption extends AbstractProduct
         $attributeOptionsData = [];
 
         foreach ($attribute->options as $attributeOption) {
-
             $optionId = $attributeOption->id;
 
             if (isset($options[$attribute->id][$optionId])) {
                 $attributeOptionsData[] = [
                     'id'           => $optionId,
                     'label'        => $attributeOption->label,
-                    'selected'     => $this->isPreselected($attribute->code, $attributeOption->label),
+//                    'selected'     => $this->isPreselected($attribute->code, $attributeOption->label),
                     'swatch_value' => $attribute->swatch_type == 'image'
                         ? $attributeOption->swatch_value_url
                         : $attributeOption->swatch_value,

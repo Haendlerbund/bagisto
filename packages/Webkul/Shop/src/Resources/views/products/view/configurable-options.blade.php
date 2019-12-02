@@ -9,6 +9,7 @@
 
     $variants = $configurableOptionHelper->getVariantsConfig($product)
 
+
     ?>
 
     {!! view_render_event('bagisto.shop.products.view.configurable-options.before', ['product' => $product]) !!}
