@@ -219,15 +219,19 @@ export default {
     },
 
     changeProductImages() {
-      galleryImages.splice(0, galleryImages.length)
+      if (this.galleryImages.length <= 0) {
+        return;
+      }
+
+      window.galleryImages.splice(0, window.galleryImages.length)
 
       this.galleryImages.forEach(function(image) {
-        galleryImages.push(image)
+        window.galleryImages.push(image)
       });
 
       if (this.simpleProduct) {
         this.config.variant_images[this.simpleProduct].forEach(function(image) {
-          galleryImages.unshift(image)
+          window.galleryImages.unshift(image)
         });
       }
     },
