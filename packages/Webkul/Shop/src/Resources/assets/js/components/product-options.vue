@@ -106,44 +106,38 @@ export default {
     },
 
     fillSelect: function(attribute) {
-      var options = this.getAttributeOptions(attribute.id),
-        prevOption,
-        index = 1,
-        allowedProducts,
-        i,
-        j;
+      let options = this.getAttributeOptions(attribute.id);
 
-      this.clearSelect(attribute)
+      this.clearSelect(attribute);
 
-      attribute.options = [{'id': '', 'label': this.config.chooseText, 'products': []}];
+      const emptyOption = {
+        id: '',
+        label: this.config.chooseText,
+        products: [],
+      };
 
-      if (attribute.prevAttribute) {
-        prevOption = attribute.prevAttribute.options[attribute.prevAttribute.selectedIndex];
+      if (!options) {
+        return [emptyOption];
       }
 
-      if (options) {
-        for (i = 0; i < options.length; i++) {
-          allowedProducts = [];
+      const prevOption = (attribute.prevAttribute)
+        ? attribute.prevAttribute.options[attribute.prevAttribute.selectedIndex]
+        : null;
 
-          if (prevOption) {
-            for (j = 0; j < options[i].products.length; j++) {
-              if (prevOption.allowedProducts && prevOption.allowedProducts.indexOf(options[i].products[j]) > -1) {
-                allowedProducts.push(options[i].products[j]);
-              }
-            }
-          } else {
-            allowedProducts = options[i].products.slice(0);
-          }
+      options = options.map(option => {
+        let allowedProducts = option.products;
 
-          if (allowedProducts.length > 0) {
-            options[i].allowedProducts = allowedProducts;
-
-            attribute.options[index] = options[i];
-
-            index++;
-          }
+        if (prevOption && prevOption.allowedProducts) {
+          allowedProducts = allowedProducts.filter(productId => prevOption.allowedProducts.includes(productId))
         }
-      }
+
+        return {...option, allowedProducts};
+      });
+
+      attribute.options = [
+        emptyOption,
+        ...options,
+      ];
     },
 
     resetChildren: function(attribute) {
