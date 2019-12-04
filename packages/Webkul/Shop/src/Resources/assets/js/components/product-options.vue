@@ -50,7 +50,7 @@ export default {
 
       this.fillSelect(this.childAttributes[0]);
     },
-    configure: function(attribute, value) {
+    configure(attribute, value) {
       this.simpleProduct = this.getSelectedProductId(attribute, value);
 
       if (value) {
@@ -78,34 +78,22 @@ export default {
       this.changeStock(this.simpleProduct);
     },
 
-    getSelectedIndex: function(attribute, value) {
-      var selectedIndex = 0;
-
-      attribute.options.forEach(function(option, index) {
-        if (option.id == value) {
-          selectedIndex = index;
-        }
-      })
-
-      return selectedIndex;
+    getSelectedIndex(attribute, value) {
+      return attribute.options.find(option => option.id == value) || 0;
     },
 
-    getSelectedProductId: function(attribute, value) {
-      var options = attribute.options,
-        matchedOptions;
+    getSelectedProductId(attribute, value) {
+      const { options } = attribute;
+      const matchedOptions = options.filter(option => option.id == value);
 
-      matchedOptions = options.filter(function (option) {
-        return option.id == value;
-      });
-
-      if (matchedOptions[0] != undefined && matchedOptions[0].allowedProducts != undefined) {
-        return matchedOptions[0].allowedProducts[0];
+      if (matchedOptions[0] == undefined || matchedOptions[0].allowedProducts == undefined) {
+        return undefined;
       }
 
-      return undefined;
+      return matchedOptions[0].allowedProducts[0];
     },
 
-    fillSelect: function(attribute) {
+    fillSelect(attribute) {
       let options = this.getAttributeOptions(attribute.id);
 
       this.clearSelect(attribute);
@@ -140,35 +128,40 @@ export default {
       ];
     },
 
-    resetChildren: function(attribute) {
-      if (attribute.childAttributes) {
-        attribute.childAttributes.forEach(function (set) {
-          set.selectedIndex = 0;
-          set.disabled = true;
-        });
+    resetChildren(attribute) {
+      if (!attribute.childAttributes) {
+        return;
       }
+
+      attribute.childAttributes = attribute.childAttributes.map(childAttribute => (
+        {
+          ...childAttribute,
+          selectedIndex: 0,
+          disabled: true,
+        }
+      ));
     },
 
     clearSelect(attribute) {
-      if (! attribute)
+      if (!attribute) {
         return;
+      }
 
-      if (! attribute.swatch_type || attribute.swatch_type == '' || attribute.swatch_type == 'dropdown') {
+      if (!attribute.swatch_type || attribute.swatch_type == '' || attribute.swatch_type == 'dropdown') {
         let element = document.getElementById("attribute_" + attribute.id);
-
         if (element) {
           element.selectedIndex = "0";
         }
-      } else {
-        let elements = document.getElementsByName('super_attribute[' + attribute.id + ']');
-
-        elements.map(element => (
-          {
-            ...element,
-            checked: false,
-          }
-        ));
+        return;
       }
+
+      let elements = document.getElementsByName('super_attribute[' + attribute.id + ']');
+      elements.map(element => (
+        {
+          ...element,
+          checked: false,
+        }
+      ));
     },
 
     getAttributeOptions(attributeId) {
@@ -178,30 +171,25 @@ export default {
     },
 
     reloadPrice() {
-      var selectedOptionCount = 0;
+      let selectedOptionCount = 0;
 
-      this.childAttributes.forEach(function(attribute) {
-        if (attribute.selectedIndex) {
-          selectedOptionCount++;
-        }
-      });
+      this.childAttributes
+        .filter(attribute => attribute.selectedIndex > 0)
+        .forEach(attribute => selectOptionCount++);
 
-      var priceLabelElement = document.querySelector('.price-label');
-      var priceElement = document.querySelector('.final-price');
+      const priceLabelElement = document.querySelector('.price-label');
+      const priceElement = document.querySelector('.final-price');
 
-      if (this.childAttributes.length == selectedOptionCount) {
+      if (this.childAttributes.length == selectedOptionCount > 0) {
         priceLabelElement.style.display = 'none';
-
         priceElement.innerHTML = this.config.variant_prices[this.simpleProduct].final_price.formated_price;
-
         eventBus.$emit('configurable-variant-selected-event', this.simpleProduct)
-      } else {
-        priceLabelElement.style.display = 'inline-block';
-
-        priceElement.innerHTML = this.config.regular_price.formated_price;
-
-        eventBus.$emit('configurable-variant-selected-event', 0)
+        return;
       }
+
+      priceLabelElement.style.display = 'inline-block';
+      priceElement.innerHTML = this.config.regular_price.formated_price;
+      eventBus.$emit('configurable-variant-selected-event', 0)
     },
 
     changeProductImages() {
@@ -211,19 +199,19 @@ export default {
 
       window.galleryImages.splice(0, window.galleryImages.length)
 
-      this.galleryImages.forEach(function(image) {
+      this.galleryImages.forEach(image => {
         window.galleryImages.push(image)
       });
 
       if (this.simpleProduct) {
-        this.config.variant_images[this.simpleProduct].forEach(function(image) {
+        this.config.variant_images[this.simpleProduct].forEach(image => {
           window.galleryImages.unshift(image)
         });
       }
     },
 
     changeStock(productId) {
-      var inStockElement = document.getElementById('in-stock');
+      let inStockElement = document.getElementById('in-stock');
       if (!inStockElement) {
         return;
       }
