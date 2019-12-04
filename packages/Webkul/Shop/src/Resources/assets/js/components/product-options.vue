@@ -7,6 +7,7 @@ export default {
     return {
       selectedProductId: '',
       simpleProduct: null,
+      childAttributes: [],
     }
   },
 
@@ -18,40 +19,37 @@ export default {
   },
 
   computed: {
-    childAttributes() {
-      let childAttributes = [];
-      let { attributes } = this.config;
-      let index = attributes.length;
-
-      while (index--) {
-        let attribute = {
-          ...attributes[index],
-          options: [],
-        };
-
-        if (index) {
-          attribute.disabled = true;
-        } else {
-          this.fillSelect(attribute);
-        }
-
-        attribute = Object.assign(attribute, {
-          childAttributes: childAttributes.slice(),
-          prevAttribute: attributes[index - 1],
-          nextAttribute: attributes[index + 1]
-        });
-
-        childAttributes.unshift(attribute);
-      }
-
-      return childAttributes;
-    },
     galleryImages() {
       return window.galleryImages.slice(0) || [];
     },
   },
 
+  created() {
+    this.setInitChildAttributes();
+  },
+
   methods: {
+    setInitChildAttributes() {
+      let { attributes } = this.config;
+
+      this.childAttributes = attributes.map((inputAttribute, index) => (
+        {
+          ...inputAttribute,
+          childAttributes: this.childAttributes,
+          options: [],
+          disabled: (index > 0),
+        }
+      ));
+
+      this.childAttributes = this.childAttributes.map((inputAttribute, index) => (
+        Object.assign(inputAttribute, {
+          prevAttribute: this.childAttributes[index - 1] || null,
+          nextAttribute: this.childAttributes[index + 1] || null,
+        })
+      ));
+
+      this.fillSelect(this.childAttributes[0]);
+    },
     configure: function(attribute, value) {
       this.simpleProduct = this.getSelectedProductId(attribute, value);
 
@@ -162,33 +160,27 @@ export default {
         return;
 
       if (! attribute.swatch_type || attribute.swatch_type == '' || attribute.swatch_type == 'dropdown') {
-        var element = document.getElementById("attribute_" + attribute.id);
+        let element = document.getElementById("attribute_" + attribute.id);
 
         if (element) {
           element.selectedIndex = "0";
         }
       } else {
-        var elements = document.getElementsByName('super_attribute[' + attribute.id + ']');
+        let elements = document.getElementsByName('super_attribute[' + attribute.id + ']');
 
-        var this_this = this;
-
-        elements.forEach(function(element) {
-          element.checked = false;
-        })
+        elements.map(element => (
+          {
+            ...element,
+            checked: false,
+          }
+        ));
       }
     },
 
     getAttributeOptions(attributeId) {
-      var this_this = this,
-        options;
-
-      this.config.attributes.forEach(function(attribute, index) {
-        if (attribute.id == attributeId) {
-          options = attribute.options;
-        }
-      })
-
-      return options;
+      return this.config.attributes
+        .find(attribute => attribute.id == attributeId)
+        .options;
     },
 
     reloadPrice() {
