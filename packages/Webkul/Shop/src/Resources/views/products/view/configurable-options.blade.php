@@ -14,7 +14,9 @@
 
     {!! view_render_event('bagisto.shop.products.view.configurable-options.before', ['product' => $product]) !!}
 
-    <product-options :config='@json($config)' inline-template>
+    <configurable-options name="selected_configurable_option" :config='@json($config)' />
+
+    {{-- <product-options :config='@json($config)' inline-template>
         <template>
             <div class="attributes">
 
@@ -98,7 +100,7 @@
 
             </div>
         </template>
-    </product-options>
+    </product-options> --}}
 
     {!! view_render_event('bagisto.shop.products.view.configurable-options.after', ['product' => $product]) !!}
 

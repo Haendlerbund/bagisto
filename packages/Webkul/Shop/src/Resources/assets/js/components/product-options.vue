@@ -1,4 +1,6 @@
 <script>
+import slugify from 'slugify'
+
 export default {
 
   inject: ['$validator'],
@@ -8,6 +10,7 @@ export default {
       selectedProductId: '',
       simpleProduct: null,
       childAttributes: [],
+      urlSearchParams: [],
     }
   },
 
@@ -26,6 +29,13 @@ export default {
 
   created() {
     this.setInitChildAttributes();
+    this.preselectBySearchParams();
+  },
+
+  watch: {
+    urlSearchParams(params) {
+      window.history.pushState(Object.entries(params), document.title ,`?${params.toString()}`)
+    },
   },
 
   methods: {
@@ -50,11 +60,24 @@ export default {
 
       this.fillSelect(this.childAttributes[0]);
     },
-    configure(attribute, value) {
-      this.simpleProduct = this.getSelectedProductId(attribute, value);
 
-      if (value) {
-        attribute.selectedIndex = this.getSelectedIndex(attribute, value);
+    preselectBySearchParams() {
+      const urlParams = new URLSearchParams(window.location.search)
+      this.childAttributes
+        .filter(attribute => urlParams.has(attribute.code))
+        .forEach(attribute => {
+          const option = attribute.options.find(option => urlParams.get(attribute.code) === this.slugify(option.label))
+          if (option) {
+            this.configure(attribute, option.id)
+          }
+      })
+    },
+
+    configure(attribute, optionId) {
+      this.simpleProduct = this.getSelectedProductId(attribute, optionId);
+
+      if (optionId) {
+        attribute.selectedIndex = this.getSelectedIndex(attribute, optionId);
 
         if (attribute.nextAttribute) {
           attribute.nextAttribute.disabled = false;
@@ -76,6 +99,26 @@ export default {
       this.reloadPrice();
       this.changeProductImages();
       this.changeStock(this.simpleProduct);
+      this.changeUrlSearchParams();
+    },
+
+    changeUrlSearchParams() {
+      this.urlSearchParams = new URLSearchParams()
+      this.childAttributes
+        .filter(attribute => attribute.selectedIndex)
+        .forEach((attribute, index) => {
+          this.urlSearchParams.set(
+            attribute.code,
+            this.slugify(attribute.selectedIndex.label)
+          )
+        })
+    },
+
+    slugify(value) {
+      return slugify(value, {
+        lower: true,
+        replacement: '-',
+      })
     },
 
     getSelectedIndex(attribute, value) {
