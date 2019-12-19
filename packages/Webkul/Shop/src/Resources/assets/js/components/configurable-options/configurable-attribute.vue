@@ -17,10 +17,9 @@
             @change="selectOption"
         >
 
-            <option
-                :value="null"
-                :selected="!selectedOption"
-            >Bitte auswählen</option>
+            <option :value="null" :selected="!selectedOption">
+                Bitte auswählen
+            </option>
 
             <option
                 v-for='option in options'

@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import slugify from 'slugify'
 import ConfigurableAttribute from './configurable-attribute'
 
 export default {
@@ -50,7 +51,28 @@ export default {
     computed: {
         attributes() {
             return this.config.attributes
+        },
+        searchParams() {
+            const params = new URLSearchParams()
+            Object.entries(this.selectedOptions).map(([code, option]) => {
+                if (option) {
+                    params.set(code, this.slugify(option.label))
+                }
+            })
+            return params
+        },
+    },
+    watch: {
+        searchParams(params) {
+            window.history.pushState(
+                Object.entries(params),
+                document.title,
+                `?${params.toString()}`
+            )
         }
+    },
+    created() {
+        this.preselectBySearchParams()
     },
     methods: {
         setSelectedOption(code, option) {
@@ -62,6 +84,26 @@ export default {
         isDisabled(code) {
             const dependent = this.dependents[code]
             return (dependent && !this.isSelected(dependent))
+        },
+        slugify(value) {
+            return slugify(value, {
+                lower: true,
+                replacement: '-',
+            })
+        },
+        preselectBySearchParams() {
+            const urlParams = new URLSearchParams(window.location.search)
+            urlParams.forEach((value, key) => {
+                const attribute = this.attributes.find(attribute => attribute.code === key)
+                if (!attribute) {
+                    return
+                }
+                const option = attribute.options.find(option => value === this.slugify(option.label))
+                if (!option) {
+                    return
+                }
+                this.selectedOptions[key] = option
+            })
         },
     },
 }
