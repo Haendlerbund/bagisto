@@ -21,11 +21,13 @@
                 Bitte auswählen
             </option>
 
-            <option
+            <ConfigurableAttributeOption
                 v-for='option in options'
-                :value="option.id"
-                :selected="selectedOption && selectedOption.id === option.id"
-            >{{ option.label }}</option>
+                :key="option.id"
+                :option="option"
+                :allowedProductIds="allowedProductIds"
+                :selectedOption="selectedOption"
+            />
 
         </select>
 
@@ -70,11 +72,17 @@
 </template>
 
 <script>
+import ConfigurableAttributeOption from './configurable-attribute-option'
+
 export default {
+    components: {
+        ConfigurableAttributeOption,
+    },
     props: {
         attribute: Object,
         selectedOption: Object,
         disabled: Boolean,
+        allowedProductIds: Array,
     },
     computed: {
         options() {

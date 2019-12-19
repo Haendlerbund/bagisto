@@ -13,6 +13,7 @@
             :attribute="attribute"
             :selectedOption="selectedOptions[attribute.code]"
             :disabled="isDisabled(attribute.code)"
+            :allowedProductIds="allowedProductIds"
             @selected="setSelectedOption"
         />
 
