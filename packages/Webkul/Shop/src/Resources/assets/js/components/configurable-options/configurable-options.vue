@@ -4,7 +4,7 @@
         <input
             type="hidden"
             :name="name"
-            :value="(selectedProduct) ? selectedProduct.id : null"
+            :value="selectedProductId"
         />
 
         <ConfigurableAttribute
@@ -43,7 +43,6 @@ export default {
         })
 
         return {
-            selectedProduct: null,
             selectedOptions,
             dependents,
         }
@@ -60,6 +59,33 @@ export default {
                 }
             })
             return params
+        },
+        allProductIds() {
+            let productIds = new Set()
+            this.attributes.forEach((attribute) => {
+                attribute.options.forEach((option) => {
+                    option.products.forEach((productId) => {
+                        productIds.add(productId)
+                    })
+                })
+            })
+            return productIds
+        },
+        allowedProductIds() {
+            let productIds = [...this.allProductIds]
+            Object.values(this.selectedOptions).forEach((option) => {
+                if (!option) {
+                    return
+                }
+                productIds = productIds.filter(productId => option.products.includes(productId))
+            })
+            return productIds
+        },
+        selectedProductId() {
+            if (!this.allowedProductIds || this.allowedProductIds.length > 1) {
+                return null
+            }
+            return this.allowedProductIds[0]
         },
     },
     watch: {
