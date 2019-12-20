@@ -83,10 +83,10 @@ export default {
             return productIds
         },
         selectedProductId() {
-            if (!this.allowedProductIds || this.allowedProductIds.length > 1) {
-                return null
-            }
             return this.allowedProductIds[0]
+        },
+        galleryImages() {
+            return window.galleryImages.slice(0) || [];
         },
     },
     watch: {
@@ -96,7 +96,12 @@ export default {
                 document.title,
                 `?${params.toString()}`
             )
-        }
+        },
+        selectedProductId() {
+            this.reloadPrice()
+            this.changeProductImages()
+            this.changeStock()
+        },
     },
     created() {
         this.preselectBySearchParams()
@@ -131,6 +136,45 @@ export default {
                 }
                 this.selectedOptions[key] = option
             })
+        },
+        reloadPrice() {
+            const priceLabelElement = document.querySelector('.price-label');
+            const priceElement = document.querySelector('.final-price');
+
+            if (this.selectedProductId) {
+                priceLabelElement.style.display = 'none';
+                priceElement.innerHTML = this.config.variant_prices[this.selectedProductId].final_price.formated_price;
+                eventBus.$emit('configurable-variant-selected-event', this.selectedProductId)
+                return;
+            }
+
+            priceLabelElement.style.display = 'inline-block';
+            priceElement.innerHTML = this.config.regular_price.formated_price;
+            eventBus.$emit('configurable-variant-selected-event', 0)
+        },
+        changeProductImages() {
+            if (this.galleryImages.length <= 0) {
+                return;
+            }
+
+            window.galleryImages.splice(0, window.galleryImages.length)
+
+            this.galleryImages.forEach(image => {
+                window.galleryImages.push(image)
+            });
+
+            if (this.selectedProductId) {
+                this.config.variant_images[this.selectedProductId].forEach(image => {
+                    window.galleryImages.unshift(image)
+                });
+            }
+        },
+        changeStock() {
+            let inStockElement = document.getElementById('in-stock');
+            if (!inStockElement) {
+                return;
+            }
+            inStockElement.style.display = (this.selectedProductId) ? 'block' : 'none';
         },
     },
 }
