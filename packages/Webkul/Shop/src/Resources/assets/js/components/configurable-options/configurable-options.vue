@@ -13,7 +13,7 @@
             :attribute="attribute"
             :selectedOption="selectedOptions[attribute.code]"
             :disabled="isDisabled(attribute.code)"
-            :allowedProductIds="allowedProductIds"
+            :allowedProductIds="getAllowedProductIds(attribute.code)"
             @selected="setSelectedOption"
         />
 
@@ -55,9 +55,8 @@ export default {
         searchParams() {
             const params = new URLSearchParams()
             Object.entries(this.selectedOptions).map(([code, option]) => {
-                if (option) {
-                    params.set(code, this.slugify(option.label))
-                }
+                if (!option) return
+                params.set(code, this.slugify(option.label))
             })
             return params
         },
@@ -70,17 +69,10 @@ export default {
                     })
                 })
             })
-            return productIds
+            return [...productIds]
         },
         allowedProductIds() {
-            let productIds = [...this.allProductIds]
-            Object.values(this.selectedOptions).forEach((option) => {
-                if (!option) {
-                    return
-                }
-                productIds = productIds.filter(productId => option.products.includes(productId))
-            })
-            return productIds
+            return this.getAllowedProductIds(null)
         },
         selectedProductId() {
             return this.allowedProductIds[0]
@@ -102,13 +94,44 @@ export default {
             this.changeProductImages()
             this.changeStock()
         },
+        selectedOptions(options) {
+            const entries = Object.entries(options)
+            Object.entries(options)
+                .filter((entry) => (entry[1]))
+                .map((entry) => {
+                    const [code, option] = entry
+                    if (!this.isAllowedToSelect(code, option)) { 
+                        this.setSelectedOption(code, null)
+                    }
+                })
+        },
     },
     created() {
         this.preselectBySearchParams()
     },
     methods: {
         setSelectedOption(code, option) {
-            this.selectedOptions[code] = option
+            this.selectedOptions = {
+                ...this.selectedOptions,
+                [code]: option,
+            }
+        },
+        getAllowedProductIds(code) {
+            let attributes = [...this.attributes]
+            if (code) {
+                const attributeIndex = this.attributes.findIndex((attribute) => attribute.code === code)
+                attributes = attributes.filter((attr, index) => index < attributeIndex)
+            }
+            return attributes
+                .filter(({ code }) => (this.selectedOptions[code]))
+                .reduce((productIds, { code }) => {
+                    const { products } = this.selectedOptions[code]
+                    return productIds.filter(productId => products.includes(productId))
+                }, this.allProductIds)
+        },
+        isAllowedToSelect(code, option) {
+            const allowedProductIds = this.getAllowedProductIds(code)
+            return (allowedProductIds.find(productId => option.products.includes(productId)))
         },
         isSelected(code) {
             return (this.selectedOptions[code])
@@ -127,14 +150,10 @@ export default {
             const urlParams = new URLSearchParams(window.location.search)
             urlParams.forEach((value, key) => {
                 const attribute = this.attributes.find(attribute => attribute.code === key)
-                if (!attribute) {
-                    return
-                }
+                if (!attribute) return
                 const option = attribute.options.find(option => value === this.slugify(option.label))
-                if (!option) {
-                    return
-                }
-                this.selectedOptions[key] = option
+                if (!option) return
+                this.setSelectedOption(key, option)
             })
         },
         reloadPrice() {
