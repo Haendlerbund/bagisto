@@ -7,6 +7,7 @@
             :value="selectedProductId"
         />
 
+        <!-- TODO: add support for swatch_type color, image and text -->
         <ConfigurableAttribute
             v-for="attribute in attributes"
             :key="attribute.code"
