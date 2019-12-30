@@ -21,7 +21,7 @@
                 Bitte auswählen
             </option>
 
-            <ConfigurableAttributeOption
+            <OptionDropdown
                 v-for='option in options'
                 :key="option.id"
                 :option="option"
@@ -32,37 +32,18 @@
         </select>
 
         <span v-if="isRadio" class="swatch-container">
-            <label class="swatch"
-                v-for='(option, index) in attribute.options'
-                v-if="option.id"
-                :data-id="option.id"
-                :data-attribute-label="attribute.label.toLowerCase()"
-                :for="['attribute_' + attribute.id + '_option_' + option.id]">
 
-                <input type="radio"
-                    v-validate="'required'"
-                    :data-attribute-value="option.label.toLowerCase()"
-                    :name="['super_attribute[' + attribute.id + ']']"
-                    :id="['attribute_' + attribute.id + '_option_' + option.id]"
-                    :value="option"
-                    :data-vv-as="'&quot;' + attribute.label + '&quot;'"
-                    @change="configure(attribute, $event.target.value)"/>
+            <OptionRadio
+                v-for='option in options'
+                :key="option.id"
+                :option="option"
+                :allowedProductIds="allowedProductIds"
+                :selectedOption="selectedOption"
+                :attribute="attribute"
+                :swatchType="swatchType"
+                @change="selectOption"
+            />
 
-                <span v-if="attribute.swatch_type == 'color'"
-                    :style="{ background: option.swatch_value }"></span>
-
-                <img v-if="attribute.swatch_type == 'image'" :src="option.swatch_value"/>
-
-                <span
-                    :data-attribute-value="option.label.toLowerCase()"
-                    v-if="attribute.swatch_type == 'text'">
-                    {{ option.label }}
-                </span>
-
-            </label>
-
-            <span v-if="! attribute.options.length"
-                class="no-options">{{ __('shop::app.products.select-above-options') }}</span>
         </span>
 
         <span class="control-error" v-if="errors.has('super_attribute[' + attribute.id + ']')">
@@ -72,11 +53,13 @@
 </template>
 
 <script>
-import ConfigurableAttributeOption from './configurable-attribute-option'
+import OptionDropdown from './option-dropdown'
+import OptionRadio from './option-radio'
 
 export default {
     components: {
-        ConfigurableAttributeOption,
+        OptionDropdown,
+        OptionRadio,
     },
     props: {
         attribute: Object,
@@ -99,7 +82,7 @@ export default {
             return (this.swatchType === 'dropdown')
         },
         isRadio() {
-            return (this.swatchType === 'radio')
+            return (!this.isDropdown)
         },
     },
     methods: {

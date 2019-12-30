@@ -7,7 +7,6 @@
             :value="selectedProductId"
         />
 
-        <!-- TODO: add support for swatch_type color, image and text -->
         <ConfigurableAttribute
             v-for="attribute in attributes"
             :key="attribute.code"
@@ -22,7 +21,7 @@
 </template>
 
 <script>
-import slugify from 'slugify'
+import slugify from '../../utils/slugify'
 import ConfigurableAttribute from './configurable-attribute'
 
 export default {
@@ -57,7 +56,7 @@ export default {
             const params = new URLSearchParams()
             Object.entries(this.selectedOptions).map(([code, option]) => {
                 if (!option) return
-                params.set(code, this.slugify(option.label))
+                params.set(code, slugify(option.label))
             })
             return params
         },
@@ -141,18 +140,12 @@ export default {
             const dependent = this.dependents[code]
             return (dependent && !this.isSelected(dependent))
         },
-        slugify(value) {
-            return slugify(value, {
-                lower: true,
-                replacement: '-',
-            })
-        },
         preselectBySearchParams() {
             const urlParams = new URLSearchParams(window.location.search)
             urlParams.forEach((value, key) => {
                 const attribute = this.attributes.find(attribute => attribute.code === key)
                 if (!attribute) return
-                const option = attribute.options.find(option => value === this.slugify(option.label))
+                const option = attribute.options.find(option => value === slugify(option.label))
                 if (!option) return
                 this.setSelectedOption(key, option)
             })

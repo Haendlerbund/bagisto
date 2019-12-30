@@ -6,7 +6,6 @@ import VueSlider from 'vue-slider-component';
 import accounting from 'accounting';
 
 import ImageSlider from './components/image-slider';
-import ProductOptions from './components/product-options';
 import ConfigurableOptions from './components/configurable-options'
 
 import { messages as localeMessages } from './lang/locales';
@@ -30,7 +29,6 @@ Vue.prototype.$http = axios
 window.eventBus = new Vue();
 
 Vue.component("image-slider", ImageSlider);
-Vue.component("product-options", ProductOptions);
 Vue.component("configurable-options", ConfigurableOptions);
 Vue.component("vue-slider", VueSlider);
 

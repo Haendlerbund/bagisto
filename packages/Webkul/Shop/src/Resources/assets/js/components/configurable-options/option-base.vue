@@ -1,11 +1,3 @@
-<template>
-    <option
-        :value="option.id"
-        :disabled="isDisabled"
-        :selected="isSelected"
-    >{{ option.label }}</option>
-</template>
-
 <script>
 export default {
     props: {
