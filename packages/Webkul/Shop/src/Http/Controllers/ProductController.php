@@ -80,21 +80,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the detailed view of a product.
-     *
-     * @param  string $slug
-     * @return \Illuminate\View\View
-     */
-    public function index(string $slug)
-    {
-        $product = $this->productRepository->findBySlugOrFail($slug);
-
-        $customer = auth()->guard('customer')->user();
-
-        return view($this->_config['view'], compact('product', 'customer'));
-    }
-
-    /**
      * Download image or file
      *
      * @param  int $productId, $attributeId
