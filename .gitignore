@@ -1,10 +1,16 @@
+# npm
 /node_modules
 /public/hot
-/public/storage
 /public/css
 /public/js
 /public/vendor
 /public/themes
+/public/fonts
+/public/storage
+/resources/coverage
+/public/mix-manifest.json
+
+/storage/*.key
 /vendor
 /.idea
 /.vscode
@@ -15,10 +21,27 @@ npm-debug.log
 yarn-error.log
 .env
 /ignorables/*
-composer.lock
-yarn.lock
-package-lock.json
-yarn.lock
+docker-compose-collection
+/bin/
+storage/dcc-data
+
+# exuberant-ctags file
+tags
+
+# https://github.com/hesselbom/vim-hsftp
+.hsftp
+
+# php-cs-fixer
 .php_cs.cache
-storage/
-storage/*.key
+
+# composer itself is not needed
+/composer.phar
+
+# Mac DS_Store Files
+/.DS_Store
+
+# phpunit itself is not needed
+/phpunit.phar
+
+# local phpunit config
+/phpunit.xml

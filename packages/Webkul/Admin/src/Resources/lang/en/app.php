@@ -545,7 +545,6 @@ return [
             'file' => 'File',
             'checkbox' => 'Checkbox',
             'use_in_flat' => "Create in Product Flat Table",
-            'default_null_option' => 'Create default empty option',
         ],
         'families' => [
             'title' => 'Families',
@@ -1181,6 +1180,8 @@ return [
             'products' => 'Products',
             'review' => 'Review',
             'allow-guest-review' => 'Allow Guest Review',
+            'guest-checkout' => 'Guest Checkout',
+            'allow-guest-checkout' => 'Allow Guest Checkout',
             'inventory' => 'Inventory',
             'stock-options' => 'Stock Options',
             'allow-backorders' => 'Allow Backorders',

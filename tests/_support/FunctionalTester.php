@@ -29,10 +29,7 @@ class FunctionalTester extends \Codeception\Actor
      * Define custom actions here
      */
 
-    /**
-     * Login as default administrator
-     */
-    public function loginAsAdmin(): void
+    public function loginAsAdmin()
     {
         $I = $this;
 
@@ -40,16 +37,10 @@ class FunctionalTester extends \Codeception\Actor
         $I->seeAuthentication('admin');
     }
 
-    /**
-     * Go to a specific route and check if admin guard is applied on it
-     *
-     * @param string     $name name of the route
-     * @param array|null $params params the route will be created with
-     */
-    public function amOnAdminRoute(string $name, array $params = null): void
+    public function amOnAdminRoute(string $name)
     {
         $I = $this;
-        $I->amOnRoute($name, $params);
+        $I->amOnRoute($name);
         $I->seeCurrentRouteIs($name);
 
         /** @var RouteCollection $routes */
@@ -58,4 +49,11 @@ class FunctionalTester extends \Codeception\Actor
         $I->assertContains('admin', $middlewares, 'check that admin middleware is applied');
     }
 
+    public function setConfigData($data) {
+        // TODO: change method as soon as there is a method to set core config data
+
+        foreach ($data as $key => $value) {
+            DB::table('core_config')->where('code', '=', $key)->update(['value' => $value]);
+        }
+    }
 }

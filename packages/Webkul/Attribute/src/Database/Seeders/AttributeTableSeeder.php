@@ -61,7 +61,9 @@ class AttributeTableSeeder extends Seeder
             ['id' => '24','code' => 'size','admin_name' => 'Size','type' => 'select','validation' => NULL,'position' => '24','is_required' => '0','is_unique' => '0','value_per_locale' => '0','value_per_channel' => '0','is_filterable' => '1','is_configurable' => '1','is_user_defined' => '1','is_visible_on_front' => '0',
             'use_in_flat' => '1','created_at' => $now,'updated_at' => $now],
             ['id' => '25','code' => 'brand','admin_name' => 'Brand','type' => 'select','validation' => NULL,'position' => '25','is_required' => '0','is_unique' => '0','value_per_locale' => '0','value_per_channel' => '0','is_filterable' => '1','is_configurable' => '0','is_user_defined' => '0','is_visible_on_front' => '1',
-            'use_in_flat' => '1','created_at' => $now,'updated_at' => $now]
+            'use_in_flat' => '1','created_at' => $now,'updated_at' => $now],
+            ['id' => '26','code' => 'guest_checkout','admin_name' => 'Guest Checkout','type' => 'boolean','validation' => NULL,'position' => '8','is_required' => '1','is_unique' => '0','value_per_locale' => '0','value_per_channel' => '0','is_filterable' => '0','is_configurable' => '0','is_user_defined' => '0','is_visible_on_front' => '0',
+             'use_in_flat' => '1','created_at' => $now,'updated_at' => $now],
         ]);
 
 
@@ -90,7 +92,8 @@ class AttributeTableSeeder extends Seeder
            ['id' => '22','locale' => 'en','name' => 'Weight','attribute_id' => '22'],
            ['id' => '23','locale' => 'en','name' => 'Color','attribute_id' => '23'],
            ['id' => '24','locale' => 'en','name' => 'Size','attribute_id' => '24'],
-           ['id' => '25','locale' => 'en','name' => 'Brand','attribute_id' => '25']
+           ['id' => '25','locale' => 'en','name' => 'Brand','attribute_id' => '25'],
+           ['id' => '26','locale' => 'en','name' => 'Allow Guest Checkout','attribute_id' => '26']
         ]);
     }
 }

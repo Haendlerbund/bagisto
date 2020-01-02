@@ -3,7 +3,6 @@
 namespace Webkul\Checkout\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Webkul\Product\Models\ProductProxy;
 use Webkul\Checkout\Contracts\Cart as CartContract;
 
 class Cart extends Model implements CartContract
@@ -118,7 +117,7 @@ class Cart extends Model implements CartContract
     }
 
     /**
-     * Checks if cart have downloadable items
+     * Checks if cart has downloadable items
      *
      * @return boolean
      */
@@ -130,5 +129,21 @@ class Cart extends Model implements CartContract
         }
 
         return false;
+    }
+
+    /**
+     * Checks if cart has items that allow guest checkout
+     *
+     * @return boolean
+     */
+    public function haveGuestCheckoutItems()
+    {
+        foreach ($this->items as $item) {
+            if ($item->product->getAttribute('guest_checkout') === 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
