@@ -206,7 +206,7 @@ class ConfigurableOption extends AbstractProduct
                 $attributeOptionsData[] = [
                     'id'           => $optionId,
                     'label'        => $attributeOption->label,
-//                    'selected'     => $this->isPreselected($attribute->code, $attributeOption->label),
+                    'selected'     => $this->isPreselected($attribute->code, $attributeOption->label),
                     'swatch_value' => $attribute->swatch_type == 'image'
                         ? $attributeOption->swatch_value_url
                         : $attributeOption->swatch_value,
@@ -219,6 +219,9 @@ class ConfigurableOption extends AbstractProduct
     }
 
     /**
+     * It is possible to preselect a variant configuration by GET parameters like in:
+     * http://localhost/product?size=m&color=blue
+     *
      * @param string $key
      * @param string $value
      *
