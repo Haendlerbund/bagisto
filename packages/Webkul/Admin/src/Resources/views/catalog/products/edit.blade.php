@@ -76,7 +76,12 @@
 
                                 @foreach ($customAttributes as $attribute)
 
+
                                     <?php
+                                    if ($attribute->code == 'guest_checkout' && ! core()->getConfigData('catalog.products.guest-checkout.allow-guest-checkout')) {
+                                        continue;
+                                    }
+
                                     $validations = [];
 
                                     if ($attribute->is_required) {
