@@ -76,6 +76,7 @@ return [
                 'title' => 'admin::app.admin.system.logo-image',
                 'type' => 'image',
                 'channel_based' => true,
+                'validation' => 'mimes:jpeg,bmp,png,jpg'
             ]
         ]
     ], [
