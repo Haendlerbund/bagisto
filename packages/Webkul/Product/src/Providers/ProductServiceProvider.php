@@ -2,6 +2,7 @@
 
 namespace Webkul\Product\Providers;
 
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 use Illuminate\Support\ServiceProvider;
 use Webkul\Product\Models\ProductProxy;
 use Webkul\Product\Observers\ProductObserver;
@@ -37,6 +38,8 @@ class ProductServiceProvider extends ServiceProvider
         $this->registerConfig();
 
         $this->registerCommands();
+
+        $this->registerEloquentFactoriesFrom(__DIR__ . '/../Database/Factories');
     }
 
     public function registerConfig() {
@@ -52,5 +55,16 @@ class ProductServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole())
             $this->commands([PriceUpdate::class,]);
+    }
+
+    /**
+     * Register factories.
+     *
+     * @param  string  $path
+     * @return void
+     */
+    protected function registerEloquentFactoriesFrom($path): void
+    {
+        $this->app->make(EloquentFactory::class)->load($path);
     }
 }

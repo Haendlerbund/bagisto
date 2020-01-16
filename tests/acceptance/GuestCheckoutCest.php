@@ -29,7 +29,7 @@ class GuestCheckoutCest
         $I->amOnPage('admin/catalog/products');
         $I->click('Add Product');
         $I->selectOption('attribute_family_id', 1);
-        $I->fillField('sku', $this->faker->randomNumber(3));
+        $I->fillField('sku', $this->faker->uuid);
         $I->click('Save Product');
         $I->seeInCurrentUrl('admin/catalog/products/edit');
         $I->scrollTo('#new');
@@ -47,7 +47,7 @@ class GuestCheckoutCest
         $I->amOnPage('admin/catalog/products');
         $I->click('Add Product');
         $I->selectOption('attribute_family_id', 1);
-        $I->fillField('sku', $this->faker->randomNumber(3));
+        $I->fillField('sku', $this->faker->uuid);
         $I->click('Save Product');
         $I->seeInCurrentUrl('admin/catalog/products/edit');
         $I->scrollTo('#new');
