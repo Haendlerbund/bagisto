@@ -36,6 +36,8 @@ tags
 
 # composer itself is not needed
 /composer.phar
+/docker-compose-collection
+/bin
 
 # Mac DS_Store Files
 /.DS_Store
