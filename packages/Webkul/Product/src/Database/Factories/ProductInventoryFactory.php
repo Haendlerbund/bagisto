@@ -9,14 +9,13 @@ use Webkul\Product\Models\ProductInventory;
 
 $factory->define(ProductInventory::class, function (Faker $faker) {
     return [
-        'qty'                => $faker->numberBetween(1, 20),
-        'product_id'         => function () {
+        'qty'                 => $faker->numberBetween(1, 20),
+        'product_id'          => function () {
             return factory(Product::class)->create()->id;
         },
         'inventory_source_id' => function () {
             return factory(InventorySource::class)->create()->id;
         },
-        //'vendor_id' => 0, // this is default in DB schema
     ];
 });
 

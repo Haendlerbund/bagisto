@@ -9,7 +9,10 @@ class AttributeGroupTableSeeder extends Seeder
 {
     public function run()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         DB::table('attribute_groups')->delete();
+        DB::table('attribute_group_mappings')->delete();
 
         DB::table('attribute_groups')->insert([
             ['id' => '1','name' => 'General','position' => '1','is_user_defined' => '0','attribute_family_id' => '1'],
@@ -47,5 +50,7 @@ class AttributeGroupTableSeeder extends Seeder
             ['attribute_id' => '25','attribute_group_id' => '1','position' => '12'],
             ['attribute_id' => '26','attribute_group_id' => '1','position' => '9']
         ]);
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
     }
 }

@@ -12,6 +12,7 @@ class AttributeTableSeeder extends Seeder
     public function run()
     {
         DB::table('attributes')->delete();
+        DB::table('attribute_translations')->delete();
 
         $now = Carbon::now();
 

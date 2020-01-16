@@ -98,11 +98,20 @@ class FunctionalTester extends \Codeception\Actor
         $I->assertContains('admin', $middlewares, 'check that admin middleware is applied');
     }
 
-    public function setConfigData($data) {
+    public function setConfigData($data)
+    {
         // TODO: change method as soon as there is a method to set core config data
-
         foreach ($data as $key => $value) {
-            DB::table('core_config')->where('code', '=', $key)->update(['value' => $value]);
+            if (DB::table('core_config')->where('code', '=', $key)->exists()) {
+                DB::table('core_config')->where('code', '=', $key)->update(['value' => $value]);
+            } else {
+                DB::table('core_config')->insert([
+                    'code'       => $key,
+                    'value'      => $value,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
         }
     }
 }

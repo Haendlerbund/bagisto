@@ -11,6 +11,7 @@ class AttributeOptionTableSeeder extends Seeder
     public function run()
     {
         DB::table('attribute_options')->delete();
+        DB::table('attribute_option_translations')->delete();
 
         DB::table('attribute_options')->insert([
             ['id' => '1', 'admin_name' => 'Red', 'sort_order' => '1', 'attribute_id' => '23'],

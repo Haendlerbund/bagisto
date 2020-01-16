@@ -5,10 +5,11 @@
 use Faker\Generator as Faker;
 use Webkul\Product\Models\Product;
 use Webkul\Product\Models\ProductAttributeValue;
+use Webkul\Attribute\Models\AttributeOption;
 
-$factory->defineAs(ProductAttributeValue::class, 'sku', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'sku', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'text_value'   => $faker->uuid,
@@ -16,9 +17,9 @@ $factory->defineAs(ProductAttributeValue::class, 'sku', function ( Faker $faker)
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'name', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'name', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'locale'       => 'en', //$faker->languageCode,
@@ -28,9 +29,9 @@ $factory->defineAs(ProductAttributeValue::class, 'name', function ( Faker $faker
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'url_key', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'url_key', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'text_value'   => $faker->unique()->slug,
@@ -38,9 +39,9 @@ $factory->defineAs(ProductAttributeValue::class, 'url_key', function ( Faker $fa
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'tax_category_id', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'tax_category_id', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'channel'       => 'default',
@@ -49,9 +50,9 @@ $factory->defineAs(ProductAttributeValue::class, 'tax_category_id', function ( F
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'new', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'new', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'boolean_value' => 1,
@@ -59,9 +60,9 @@ $factory->defineAs(ProductAttributeValue::class, 'new', function ( Faker $faker)
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'featured', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'featured', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'boolean_value' => 1,
@@ -69,9 +70,9 @@ $factory->defineAs(ProductAttributeValue::class, 'featured', function ( Faker $f
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'visible_individually', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'visible_individually', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'boolean_value' => 1,
@@ -79,9 +80,9 @@ $factory->defineAs(ProductAttributeValue::class, 'visible_individually', functio
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'status', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'status', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'boolean_value' => 1,
@@ -89,9 +90,9 @@ $factory->defineAs(ProductAttributeValue::class, 'status', function ( Faker $fak
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'short_description', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'short_description', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'locale'       => 'en', //$faker->languageCode,
@@ -101,9 +102,9 @@ $factory->defineAs(ProductAttributeValue::class, 'short_description', function (
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'description', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'description', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'locale'       => 'en', //$faker->languageCode,
@@ -113,9 +114,9 @@ $factory->defineAs(ProductAttributeValue::class, 'description', function ( Faker
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'price', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'price', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'float_value'  => $faker->randomFloat(4, 0, 1000),
@@ -123,9 +124,9 @@ $factory->defineAs(ProductAttributeValue::class, 'price', function ( Faker $fake
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'cost', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'cost', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'channel'      => 'default',
@@ -134,9 +135,9 @@ $factory->defineAs(ProductAttributeValue::class, 'cost', function ( Faker $faker
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'special_price', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'special_price', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'float_value'  => $faker->randomFloat(4, 0, 100),
@@ -144,9 +145,9 @@ $factory->defineAs(ProductAttributeValue::class, 'special_price', function ( Fak
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'special_price_from', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'special_price_from', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'channel'      => 'default',
@@ -155,9 +156,9 @@ $factory->defineAs(ProductAttributeValue::class, 'special_price_from', function 
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'special_price_to', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'special_price_to', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'channel'      => 'default',
@@ -166,9 +167,9 @@ $factory->defineAs(ProductAttributeValue::class, 'special_price_to', function ( 
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'meta_title', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'meta_title', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'locale'       => 'en', //$faker->languageCode,
@@ -179,9 +180,9 @@ $factory->defineAs(ProductAttributeValue::class, 'meta_title', function ( Faker 
 });
 
 
-$factory->defineAs(ProductAttributeValue::class, 'meta_keywords', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'meta_keywords', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'locale'       => 'en', //$faker->languageCode,
@@ -191,9 +192,9 @@ $factory->defineAs(ProductAttributeValue::class, 'meta_keywords', function ( Fak
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'meta_description', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'meta_description', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'   => function () {
             return factory(Product::class)->create()->id;
         },
         'locale'       => 'en', //$faker->languageCode,
@@ -202,9 +203,9 @@ $factory->defineAs(ProductAttributeValue::class, 'meta_description', function ( 
         'attribute_id' => 18,
     ];
 });
-$factory->defineAs(ProductAttributeValue::class, 'width', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'width', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'integer_value' => $faker->numberBetween(1, 50),
@@ -212,9 +213,9 @@ $factory->defineAs(ProductAttributeValue::class, 'width', function ( Faker $fake
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'height', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'height', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'integer_value' => $faker->numberBetween(1, 50),
@@ -222,9 +223,9 @@ $factory->defineAs(ProductAttributeValue::class, 'height', function ( Faker $fak
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'depth', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'depth', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'integer_value' => $faker->numberBetween(1, 50),
@@ -232,9 +233,9 @@ $factory->defineAs(ProductAttributeValue::class, 'depth', function ( Faker $fake
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'weight', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'weight', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'integer_value' => $faker->numberBetween(1, 50),
@@ -242,9 +243,9 @@ $factory->defineAs(ProductAttributeValue::class, 'weight', function ( Faker $fak
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'color', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'color', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'integer_value' => $faker->numberBetween(1, 5),
@@ -252,9 +253,9 @@ $factory->defineAs(ProductAttributeValue::class, 'color', function ( Faker $fake
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'size', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'size', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
         'integer_value' => $faker->numberBetween(1, 5),
@@ -262,13 +263,15 @@ $factory->defineAs(ProductAttributeValue::class, 'size', function ( Faker $faker
     ];
 });
 
-$factory->defineAs(ProductAttributeValue::class, 'brand', function ( Faker $faker) {
+$factory->defineAs(ProductAttributeValue::class, 'brand', function (Faker $faker) {
     return [
-        'product_id' => function() {
+        'product_id'    => function () {
             return factory(Product::class)->create()->id;
         },
-        'text_value'   => $faker->sentence,
-        'attribute_id' => 25
+        'attribute_id'  => 25,
+        'integer_value' => function () {
+            return factory(AttributeOption::class)->create()->id;
+        },
     ];
 });
 

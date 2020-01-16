@@ -4,7 +4,6 @@ namespace Tests\Webkul\Unit\Shop;
 
 use FunctionalTester;
 use Faker\Factory;
-use Illuminate\Support\Facades\DB;
 use Cart;
 
 class GuestCheckoutCest
@@ -40,6 +39,8 @@ class GuestCheckoutCest
     }
 
     public function testGuestCheckout(FunctionalTester $I) {
+
+        $I->amGoingTo('try to add products to cart with guest checkout turned on or off');
 
         $scenarios = [
             [

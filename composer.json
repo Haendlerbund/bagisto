@@ -35,9 +35,9 @@
     },
 
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.1",
         "codeception/codeception": "3.1.*",
         "codeception/codeception-progress-reporter": "^1.0",
-        "barryvdh/laravel-debugbar": "^3.1",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
         "laravel/dusk": "^4.0",
