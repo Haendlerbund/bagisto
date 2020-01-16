@@ -1205,6 +1205,7 @@ return [
             'allow-guest-review' => 'Allow Guest Review',
             'guest-checkout' => 'Guest Checkout',
             'allow-guest-checkout' => 'Allow Guest Checkout',
+            'allow-guest-checkout-hint' => 'Hint: If turned on, this option can be configured for each product specifically.',
             'inventory' => 'Inventory',
             'stock-options' => 'Stock Options',
             'allow-backorders' => 'Allow Backorders',
