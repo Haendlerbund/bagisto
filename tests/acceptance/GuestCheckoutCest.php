@@ -22,15 +22,16 @@ class GuestCheckoutCest
         $I->amOnPage('/admin/configuration/catalog/products');
         $I->see(__('admin::app.admin.system.allow-guest-checkout'));
         $I->selectOption('catalog[products][guest-checkout][allow-guest-checkout]', 1);
-        $I->click('Save');
+        $I->click(__('admin::app.configuration.save-btn-title'));
         $I->seeRecord('core_config', ['code' => 'catalog.products.guest-checkout.allow-guest-checkout', 'value' => 1]);
 
         $I->amGoingTo('assert that the product guest checkout configuration is shown');
         $I->amOnPage('admin/catalog/products');
-        $I->click('Add Product');
+        $I->click(__('admin::app.catalog.products.add-product-btn-title'));
         $I->selectOption('attribute_family_id', 1);
         $I->fillField('sku', $this->faker->uuid);
-        $I->click('Save Product');
+        $I->dontSeeInSource('<span class="control-error">The "SKU" field is required.</span>');
+        $I->click(__('admin::app.catalog.products.save-btn-title'));
         $I->seeInCurrentUrl('admin/catalog/products/edit');
         $I->scrollTo('#new');
         $I->see('Guest Checkout');
@@ -40,15 +41,16 @@ class GuestCheckoutCest
         $I->amOnPage('/admin/configuration/catalog/products');
         $I->see(__('admin::app.admin.system.allow-guest-checkout'));
         $I->selectOption('catalog[products][guest-checkout][allow-guest-checkout]', 0);
-        $I->click('Save');
+        $I->click(__('admin::app.configuration.save-btn-title'));
         $I->seeRecord('core_config', ['code' => 'catalog.products.guest-checkout.allow-guest-checkout', 'value' => 0]);
 
         $I->amGoingTo('assert that the product guest checkout configuration is not shown');
         $I->amOnPage('admin/catalog/products');
-        $I->click('Add Product');
+        $I->click(__('admin::app.catalog.products.add-product-btn-title'));
         $I->selectOption('attribute_family_id', 1);
         $I->fillField('sku', $this->faker->uuid);
-        $I->click('Save Product');
+        $I->dontSeeInSource('<span class="control-error">The "SKU" field is required.</span>');
+        $I->click(__('admin::app.catalog.products.save-btn-title'));
         $I->seeInCurrentUrl('admin/catalog/products/edit');
         $I->scrollTo('#new');
         $I->dontSee('Guest Checkout');

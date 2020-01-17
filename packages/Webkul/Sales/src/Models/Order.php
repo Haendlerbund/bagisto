@@ -1,34 +1,19 @@
 <?php
-
 namespace Webkul\Sales\Models;
-
 use Illuminate\Database\Eloquent\Model;
 use Webkul\Sales\Contracts\Order as OrderContract;
-
 class Order extends Model implements OrderContract
 {
-    protected $guarded = [
-        'id',
-        'items',
-        'shipping_address',
-        'billing_address',
-        'customer',
-        'channel',
-        'payment',
-        'created_at',
-        'updated_at',
-    ];
-
+    protected $guarded = ['id', 'items', 'shipping_address', 'billing_address', 'customer', 'channel', 'payment', 'created_at', 'updated_at'];
     protected $statusLabel = [
-        'pending'         => 'Pending',
+        'pending' => 'Pending',
         'pending_payment' => 'Pending Payment',
-        'processing'      => 'Processing',
-        'completed'       => 'Completed',
-        'canceled'        => 'Canceled',
-        'closed'          => 'Closed',
-        'fraud'           => 'Fraud',
+        'processing' => 'Processing',
+        'completed' => 'Completed',
+        'canceled' => 'Canceled',
+        'closed' => 'Closed',
+        'fraud' => 'Fraud'
     ];
-
     /**
      * Get the order items record associated with the order.
      */
@@ -36,7 +21,6 @@ class Order extends Model implements OrderContract
     {
         return $this->customer_first_name . ' ' . $this->customer_last_name;
     }
-
     /**
      * Returns the status label from status code
      */
@@ -44,7 +28,6 @@ class Order extends Model implements OrderContract
     {
         return $this->statusLabel[$this->status];
     }
-
     /**
      * Return base total due amount
      */
@@ -52,7 +35,6 @@ class Order extends Model implements OrderContract
     {
         return $this->base_grand_total - $this->base_grand_total_invoiced;
     }
-
     /**
      * Return total due amount
      */
@@ -60,7 +42,6 @@ class Order extends Model implements OrderContract
     {
         return $this->grand_total - $this->grand_total_invoiced;
     }
-
     /**
      * Get the order items record associated with the order.
      */
@@ -68,7 +49,6 @@ class Order extends Model implements OrderContract
     {
         return $this->hasMany(OrderItemProxy::modelClass())->whereNull('parent_id');
     }
-
     /**
      * Get the order items record associated with the order.
      */
@@ -76,7 +56,6 @@ class Order extends Model implements OrderContract
     {
         return $this->hasMany(OrderItemProxy::modelClass());
     }
-
     /**
      * Get the order shipments record associated with the order.
      */
@@ -84,7 +63,6 @@ class Order extends Model implements OrderContract
     {
         return $this->hasMany(ShipmentProxy::modelClass());
     }
-
     /**
      * Get the order invoices record associated with the order.
      */
@@ -92,7 +70,6 @@ class Order extends Model implements OrderContract
     {
         return $this->hasMany(InvoiceProxy::modelClass());
     }
-
     /**
      * Get the order refunds record associated with the order.
      */
@@ -108,7 +85,6 @@ class Order extends Model implements OrderContract
     {
         return $this->morphTo();
     }
-
     /**
      * Get the addresses for the order.
      */
@@ -116,7 +92,6 @@ class Order extends Model implements OrderContract
     {
         return $this->hasMany(OrderAddressProxy::modelClass());
     }
-
     /**
      * Get the payment for the order.
      */
@@ -124,7 +99,6 @@ class Order extends Model implements OrderContract
     {
         return $this->hasOne(OrderPaymentProxy::modelClass());
     }
-
     /**
      * Get the biling address for the order.
      */
@@ -132,7 +106,6 @@ class Order extends Model implements OrderContract
     {
         return $this->addresses()->where('address_type', 'billing');
     }
-
     /**
      * Get billing address for the order.
      */
@@ -140,7 +113,6 @@ class Order extends Model implements OrderContract
     {
         return $this->billing_address()->first();
     }
-
     /**
      * Get the shipping address for the order.
      */
@@ -148,7 +120,6 @@ class Order extends Model implements OrderContract
     {
         return $this->addresses()->where('address_type', 'shipping');
     }
-
     /**
      * Get shipping address for the order.
      */
@@ -156,7 +127,6 @@ class Order extends Model implements OrderContract
     {
         return $this->shipping_address()->first();
     }
-
     /**
      * Get the channel record associated with the order.
      */
@@ -164,7 +134,6 @@ class Order extends Model implements OrderContract
     {
         return $this->morphTo();
     }
-
     /**
      * Checks if cart have stockable items
      *
@@ -176,10 +145,8 @@ class Order extends Model implements OrderContract
             if ($item->getTypeInstance()->isStockable())
                 return true;
         }
-
         return false;
     }
-
     /**
      * Checks if new shipment is allow or not
      */
@@ -187,15 +154,12 @@ class Order extends Model implements OrderContract
     {
         if ($this->status == 'fraud')
             return false;
-
         foreach ($this->items as $item) {
             if ($item->canShip())
                 return true;
         }
-
         return false;
     }
-
     /**
      * Checks if new invoice is allow or not
      */
@@ -211,7 +175,6 @@ class Order extends Model implements OrderContract
 
         return false;
     }
-
     /**
      * Checks if order can be canceled or not
      */
@@ -224,10 +187,8 @@ class Order extends Model implements OrderContract
             if ($item->canCancel())
                 return true;
         }
-
         return false;
     }
-
     /**
      * Checks if order can be refunded or not
      */
@@ -240,10 +201,8 @@ class Order extends Model implements OrderContract
             if ($item->qty_to_refund > 0)
                 return true;
         }
-
         if ($this->base_grand_total_invoiced - $this->base_grand_total_refunded - $this->refunds()->sum('base_adjustment_fee') > 0)
             return true;
-
         return false;
     }
 }

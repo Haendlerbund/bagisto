@@ -17,19 +17,9 @@
                 <span></span>
             </div>
 
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
             {!! view_render_event('bagisto.shop.customers.account.address.edit.before', ['address' => $address]) !!}
 
-            <form id="customer-address-form" method="post" action="{{ route('customer.address.edit', $address->id) }}" @submit.prevent="onSubmit">
+            <form method="post" action="{{ route('customer.address.edit', $address->id) }}" @submit.prevent="onSubmit">
 
                 <div class="account-table-content">
                     @method('PUT')
@@ -37,17 +27,6 @@
 
                     {!! view_render_event('bagisto.shop.customers.account.address.edit_form_controls.before', ['address' => $address]) !!}
 
-                    <div class="control-group" :class="[errors.has('company_name') ? 'has-error' : '']">
-                        <label for="company_name">{{ __('shop::app.customer.account.address.edit.company_name') }}</label>
-                        <input type="text" value="{{ $address->company_name }}"  class="control" name="company_name" data-vv-as="&quot;{{ __('shop::app.customer.account.address.edit.company_name') }}&quot;">
-                        <span class="control-error" v-if="errors.has('company_name')">@{{ errors.first('company_name') }}</span>
-                    </div>
-
-                    <div class="control-group" :class="[errors.has('vat_id') ? 'has-error' : '']">
-                        <label for="vat_id">{{ __('shop::app.customer.account.address.edit.vat_id') }}</label>
-                        <input type="text" value="{{ $address->vat_id }}" class="control" name="vat_id" data-vv-as="&quot;{{ __('shop::app.customer.account.address.edit.vat_id') }}&quot;">
-                        <span class="control-error" v-if="errors.has('vat_id')">@{{ errors.first('vat_id') }}</span>
-                    </div>
 
                     <?php $addresses = explode(PHP_EOL, $address->address1); ?>
 

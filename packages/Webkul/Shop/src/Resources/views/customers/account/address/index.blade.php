@@ -13,10 +13,8 @@
         <div class="account-layout">
 
             <div class="account-head">
-                <span class="back-icon"><a href="{{ route('customer.account.index') }}"><i
-                            class="icon icon-menu-back"></i></a></span>
-                <span
-                    class="account-heading">{{ __('shop::app.customer.account.address.index.title') }}</span>
+                <span class="back-icon"><a href="{{ route('customer.account.index') }}"><i class="icon icon-menu-back"></i></a></span>
+                <span class="account-heading">{{ __('shop::app.customer.account.address.index.title') }}</span>
 
                 @if (! $addresses->isEmpty())
                     <span class="account-action">
@@ -40,19 +38,10 @@
                         @foreach ($addresses as $address)
                             <div class="address-card">
                                 <div class="details">
-                                    <span
-                                        class="bold">{{ auth()->guard('customer')->user()->name }}</span>
+                                    <span class="bold">{{ auth()->guard('customer')->user()->name }}</span>
                                     <ul class="address-card-list">
                                         <li class="mt-5">
-                                            {{ $address->company_name }}
-                                        </li>
-
-                                        <li class="mt-5">
-                                            {{ $address->first_name }}
-                                        </li>
-
-                                        <li class="mt-5">
-                                            {{ $address->last_name }}
+                                            {{ $address->name }}
                                         </li>
 
                                         <li class="mt-5">
@@ -72,8 +61,7 @@
                                         </li>
 
                                         <li class="mt-10">
-                                            {{ __('shop::app.customer.account.address.index.contact') }}
-                                            : {{ $address->phone }}
+                                            {{ __('shop::app.customer.account.address.index.contact') }} : {{ $address->phone }}
                                         </li>
                                     </ul>
 
@@ -85,8 +73,7 @@
                                     </span>
 
                                         <span>
-                                        <a href="{{ route('address.delete', $address->id) }}"
-                                           onclick="deleteAddress('{{ __('shop::app.customer.account.address.index.confirm-delete') }}')">
+                                        <a href="{{ route('address.delete', $address->id) }}" onclick="deleteAddress('{{ __('shop::app.customer.account.address.index.confirm-delete') }}')">
                                             {{ __('shop::app.customer.account.address.index.delete') }}
                                         </a>
                                     </span>

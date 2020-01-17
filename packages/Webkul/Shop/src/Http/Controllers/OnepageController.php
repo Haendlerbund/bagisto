@@ -73,11 +73,11 @@ class OnepageController extends Controller
 
         $cart = Cart::getCart();
 
-        if (! auth()->guard('customer')->check() && $cart->haveDownloadableItems()) {
+        if (! auth()->guard('customer')->check() && $cart->hasDownloadableItems()) {
             return redirect()->route('customer.session.index');
         }
 
-        if (! auth()->guard('customer')->check() && ! $cart->haveGuestCheckoutItems()) {
+        if (! auth()->guard('customer')->check() && ! $cart->hasGuestCheckoutItems()) {
             return redirect()->route('customer.session.index');
         }
 

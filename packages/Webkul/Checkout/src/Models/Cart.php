@@ -119,7 +119,7 @@ class Cart extends Model implements CartContract
      *
      * @return boolean
      */
-    public function haveDownloadableItems()
+    public function hasDownloadableItems()
     {
         foreach ($this->items as $item) {
             if ($item->type == 'downloadable')
@@ -134,7 +134,7 @@ class Cart extends Model implements CartContract
      *
      * @return boolean
      */
-    public function haveGuestCheckoutItems()
+    public function hasGuestCheckoutItems()
     {
         foreach ($this->items as $item) {
             if ($item->product->getAttribute('guest_checkout') === 0) {
