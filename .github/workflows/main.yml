@@ -1,5 +1,4 @@
 name: testing
-description: 'use codeception as testing framework'
 on: [push]
 
 jobs:
