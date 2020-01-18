@@ -1,17 +1,23 @@
-name: CI
-
+name: testing
+description: 'use codeception as testing framework'
 on: [push]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+#  build:
+#    runs-on: ubuntu-latest
+#      steps:
+#      - uses: actions/checkout@v1
+#      - name: Run a multi-line script
+#        run: |
+#          echo Add other actions to build,
+#          echo test, and deploy your project.
+#
+  test:
+    runs-on: docker:18.09-dind
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: ls -la
-    - name: Run a multi-line script
+    - name: Create environemt
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        cd docker-compose
+        docker-compose up -d
+        docker ps
