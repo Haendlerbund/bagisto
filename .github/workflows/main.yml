@@ -20,5 +20,4 @@ jobs:
         cd docker-compose
         docker-compose up -d
         docker ps
-        docker exec -it docker-compose_app_1 bash
-        ls -la
+        docker exec -t --user=www-data docker-compose_app_1 ls -la
