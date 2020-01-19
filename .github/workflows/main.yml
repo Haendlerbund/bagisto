@@ -20,4 +20,6 @@ jobs:
         cd docker-compose
         docker-compose up -d
         docker ps
+        docker exec -t --user=www-data docker-compose_app_1 cd ../
+        docker exec -t --user=www-data docker-compose_app_1 pwd
         docker exec -t --user=www-data docker-compose_app_1 ls -la
