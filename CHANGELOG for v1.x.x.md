@@ -42,6 +42,8 @@
 
 * #2033 [fixed] - API route for products throws error
 
+* #2012 [fixed] - FGetting exception when clicking on view all under review section at product page.
+
 * #2045 [fixed] - Login option is not coming while checkout with existing customer mail id.
 
 * #2051 [fixed] - Forgot password not working due to recent changes in mail keys.
@@ -139,3 +141,8 @@
 * #2227 [fixed] - Grand total column is not visible in invoice pdf, also getting incorrect currency symbol for grand total.
 
 * #2237 [fixed] - Error when trying to login with app.php locale set to ja
+=======
+* #2147 [fixed] - Sort order of bundle product doesn't work..
+
+* #2168 [fixed] - locale direction drop down always select ltr.
+>>>>>>> 75b5d25477032244220c23d113f91dcf7fa5aebc
