@@ -87,7 +87,13 @@ class AttributeCest
             'admin_name' => $I->fake()->firstName,
         ];
 
-        $I->fillField('code', $testData['code']);
+        $codeValue = $I->grabValueFrom('#code');
+        if (empty($codeValue)) {
+            $I->fillField('code', $testData['code']);
+        } else {
+            $testData['code'] = $codeValue;
+        }
+
         $I->fillField('admin_name', $testData['admin_name']);
 
         if ($skipType) {
