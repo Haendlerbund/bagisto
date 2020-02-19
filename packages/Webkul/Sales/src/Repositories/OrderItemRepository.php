@@ -13,7 +13,6 @@ use Webkul\Sales\Contracts\OrderItem;
  * @author    Jitendra Singh <jitendra@webkul.com>
  * @copyright 2018 Webkul Software Pvt Ltd (http://www.webkul.com)
  */
-
 class OrderItemRepository extends Repository
 {
     /**
@@ -28,6 +27,7 @@ class OrderItemRepository extends Repository
 
     /**
      * @param array $data
+     *
      * @return mixed
      */
     public function create(array $data)
@@ -44,6 +44,7 @@ class OrderItemRepository extends Repository
 
     /**
      * @param mixed $orderItem
+     *
      * @return mixed
      */
     public function collectTotals($orderItem)
@@ -103,6 +104,7 @@ class OrderItemRepository extends Repository
 
     /**
      * @param mixed $orderItem
+     *
      * @return void
      */
     public function manageInventory($orderItem)
@@ -122,21 +124,21 @@ class OrderItemRepository extends Repository
                 continue;
 
             $orderedInventory = $item->product->ordered_inventories()
-                    ->where('channel_id', $orderItem->order->channel->id)
-                    ->first();
+                ->where('channel_id', $orderItem->order->channel->id)
+                ->first();
 
             $qty = $item->qty_ordered ?: $item->parent->qty_ordered;
 
             if ($orderedInventory) {
                 $orderedInventory->update([
-                        'qty' => $orderedInventory->qty + $qty
-                    ]);
+                    'qty' => $orderedInventory->qty + $qty,
+                ]);
             } else {
                 $item->product->ordered_inventories()->create([
-                        'qty' => $qty,
-                        'product_id' => $item->product_id,
-                        'channel_id' => $orderItem->order->channel->id,
-                    ]);
+                    'qty'        => $qty,
+                    'product_id' => $item->product_id,
+                    'channel_id' => $orderItem->order->channel->id,
+                ]);
             }
         }
     }
@@ -145,13 +147,14 @@ class OrderItemRepository extends Repository
      * Returns qty to product inventory after order cancelation
      *
      * @param OrderItem $orderItem
+     *
      * @return void
      */
     public function returnQtyToProductInventory($orderItem)
     {
         $orderedInventory = $orderItem->product->ordered_inventories()
-                ->where('channel_id', $orderItem->order->channel->id)
-                ->first();
+            ->where('channel_id', $orderItem->order->channel->id)
+            ->first();
 
         if (! $orderedInventory)
             return;

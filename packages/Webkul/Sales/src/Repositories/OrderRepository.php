@@ -43,7 +43,8 @@ class OrderRepository extends Repository
         OrderItemRepository $orderItemRepository,
         DownloadableLinkPurchasedRepository $downloadableLinkPurchasedRepository,
         App $app
-    ) {
+    )
+    {
         $this->orderItemRepository = $orderItemRepository;
 
         $this->downloadableLinkPurchasedRepository = $downloadableLinkPurchasedRepository;
@@ -77,16 +78,12 @@ class OrderRepository extends Repository
             if (isset($data['customer']) && $data['customer']) {
                 $data['customer_id'] = $data['customer']->id;
                 $data['customer_type'] = get_class($data['customer']);
-            } else {
-                unset($data['customer']);
             }
 
             if (isset($data['channel']) && $data['channel']) {
                 $data['channel_id'] = $data['channel']->id;
                 $data['channel_type'] = get_class($data['channel']);
                 $data['channel_name'] = $data['channel']->name;
-            } else {
-                unset($data['channel']);
             }
 
             $data['status'] = 'pending';
@@ -195,14 +192,13 @@ class OrderRepository extends Repository
      */
     public function generateIncrementId()
     {
-        foreach ([  'Prefix' => 'prefix',
-                    'Length' => 'length',
-                    'Suffix' => 'suffix', ] as
-                    $varSuffix => $confKey)
-                {
-                    $var = "invoiceNumber{$varSuffix}";
-                    $$var = core()->getConfigData('sales.orderSettings.order_number.order_number_'.$confKey) ?: false;
-                }
+        foreach (['Prefix' => 'prefix',
+                  'Length' => 'length',
+                  'Suffix' => 'suffix',] as
+                 $varSuffix => $confKey) {
+            $var = "invoiceNumber{$varSuffix}";
+            $$var = core()->getConfigData('sales.orderSettings.order_number.order_number_' . $confKey) ?: false;
+        }
 
         $lastOrder = $this->model->orderBy('id', 'desc')->limit(1)->first();
         $lastId = $lastOrder ? $lastOrder->id : 0;
