@@ -16,13 +16,12 @@
 
         @if (core()->getCurrentLocale()->direction == 'rtl')
             <link href="{{ asset('themes/velocity/assets/css/bootstrap-flipped.css') }}" rel="stylesheet">
-
         @endif
 
         @if ($favicon = core()->getCurrentChannel()->favicon_url)
             <link rel="icon" sizes="16x16" href="{{ $favicon }}" />
         @else
-            <link rel="icon" sizes="16x16" href="{{ asset('themes/velocity/assets/images/favicon.png') }}" />
+            <link rel="icon" sizes="16x16" href="{{ asset('/themes/velocity/assets/images/static/v-icon.png') }}" />
         @endif
 
         <script
@@ -32,7 +31,7 @@
 
         <script
             type="text/javascript"
-            baseUrl='{{ url()->to('/') }}'
+            baseUrl="{{ url()->to('/') }}"
             src="{{ asset('themes/velocity/assets/js/velocity.js') }}">
         </script>
 
@@ -60,6 +59,8 @@
 
         <div id="app">
             {{-- <responsive-sidebar v-html="responsiveSidebarTemplate"></responsive-sidebar> --}}
+
+            <product-quick-view v-if="$root.quickView"></product-quick-view>
 
             <div class="main-container-wrapper">
 
@@ -131,8 +132,6 @@
 
         <script type="text/javascript">
             (() => {
-                var baseURL = '{{ url()->to('/') }}';
-
                 var showAlert = (messageType, messageLabel, message) => {
                     if (messageType && message !== '') {
                         let html = `<div class="alert ${messageType} alert-dismissible" id="alert">
@@ -155,16 +154,16 @@
 
                 @if ($message = session('success'))
                     messageType = 'alert-success';
-                    messageLabel = 'Success';
+                    messageLabel = "{{ __('velocity::app.shop.general.alert.success') }}";
                 @elseif ($message = session('warning'))
                     messageType = 'alert-warning';
-                    messageLabel = 'Warning';
+                    messageLabel = "{{ __('velocity::app.shop.general.alert.warning') }}";
                 @elseif ($message = session('error'))
                     messageType = 'alert-danger';
-                    messageLabel = 'Error';
+                    messageLabel = "{{ __('velocity::app.shop.general.alert.error') }}";
                 @elseif ($message = session('info'))
                     messageType = 'alert-info';
-                    messageLabel = 'Info';
+                    messageLabel = "{{ __('velocity::app.shop.general.alert.info') }}";
                 @endif
 
                 if (messageType && '{{ $message }}' !== '') {
@@ -172,12 +171,14 @@
                 }
 
                 window.serverErrors = [];
-                @if(isset($errors))
+                @if (isset($errors))
                     @if (count($errors))
                         window.serverErrors = @json($errors->getMessages());
                     @endif
                 @endif
-            })()
+
+                window._translations = @json(app('Webkul\Velocity\Helpers\Helper')->jsonTranslations());
+            })();
         </script>
 
         <script

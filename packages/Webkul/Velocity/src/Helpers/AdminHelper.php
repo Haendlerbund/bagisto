@@ -22,51 +22,25 @@ class AdminHelper
 
     public function saveLocaleImg($locale)
     {
-        $uploadedImagePath = $this->uploadImage($locale, 'locale_image.image_0');
+        $data = request()->all();
+        $type = 'locale_image';
 
-        if ($uploadedImagePath) {
-            $locale->locale_image = $uploadedImagePath;
-            $locale->save();
-        }
+        $locale = $this->uploadImage($locale, $data, $type);
 
         return $locale;
     }
 
-    public function storeCategoryIcon($categoryId)
+    public function storeCategoryIcon($category)
     {
-        $category = $this->categoryRepository->findOrFail($categoryId);
+        $data = request()->all();
+        $type = 'category_icon_path';
 
-        $uploadedImagePath = $this->uploadImage($category, 'category_icon_path.image_1');
+        if (! $category instanceof \Webkul\Category\Models\Category)
+            $category = $this->categoryRepository->findOrFail($category);
 
-        if ($uploadedImagePath) {
-            $category->category_icon_path = $uploadedImagePath;
-            $category->save();
-        }
+        $category = $this->uploadImage($category, $data, $type);
 
         return $category;
-    }
-
-    public function uploadImage($record, $type)
-    {
-        $request = request();
-
-        $image = '';
-        $file = $type;
-        $dir = 'velocity/' . $type;
-
-        if ($request->hasFile($file)) {
-            if ($type == 'locale_image.image_0' && $record->locale_image) {
-                Storage::delete($record->locale_image);
-            }
-            if ($type == 'category_icon_path.image_1' && $record->category_icon_path) {
-                Storage::delete($record->category_icon_path);
-            }
-
-            $image = $request->file($file)->store($dir);
-
-            return $image;
-        }
-        return false;
     }
 
     public function storeSliderDetails($slider)
@@ -75,5 +49,34 @@ class AdminHelper
         $slider->save();
 
         return true;
+    }
+
+    public function uploadImage($model, $data, $type) {
+        if (isset($data[$type])) {
+            $request = request();
+
+            foreach ($data[$type] as $imageId => $image) {
+                $file = $type . '.' . $imageId;
+                $dir = 'velocity/' . $type . '/' . $model->id;
+
+                if ($request->hasFile($file)) {
+                    if ($model->{$type}) {
+                        Storage::delete($model->{$type});
+                    }
+
+                    $model->{$type} = $request->file($file)->store($dir);
+                    $model->save();
+                }
+            }
+        } else {
+            if ($model->{$type}) {
+                Storage::delete($model->{$type});
+            }
+
+            $model->{$type} = null;
+            $model->save();
+        }
+
+        return $model;
     }
 }

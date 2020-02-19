@@ -7,6 +7,8 @@
 @section('content')
     <div class="content">
 
+        <?php $locale = request()->get('locale') ?: app()->getLocale(); ?>
+
         <form method="POST" action="" @submit.prevent="onSubmit" enctype="multipart/form-data">
 
             <div class="page-header">
@@ -56,11 +58,11 @@
                         <div class="control-group" :class="[errors.has('status') ? 'has-error' : '']">
                             <label for="status" class="required">{{ __('velocity::app.admin.contents.page.status') }}</label>
                             <select class="control" v-validate="'required'" id="status" name="status" data-vv-as="&quot;{{ __('velocity::app.admin.contents.page.status') }}&quot;">
-                                <option value="0">
-                                    {{ __('velocity::app.admin.contents.inactive') }}
-                                </option>
                                 <option value="1">
                                     {{ __('velocity::app.admin.contents.active') }}
+                                </option>
+                                <option value="0">
+                                    {{ __('velocity::app.admin.contents.inactive') }}
                                 </option>
                             </select>
                             <span class="control-error" v-if="errors.has('status')">@{{ errors.first('status') }}</span>
@@ -100,7 +102,7 @@
 
     <script type="text/x-template" id="content-type-template">
         <div>
-            <div class="control-group" :class="[errors.has('custom_title') ? 'has-error' : '']">
+            {{-- <div class="control-group" :class="[errors.has('custom_title') ? 'has-error' : '']">
                 <label for="custom_title">
                     {{ __('velocity::app.admin.contents.content.custom-title') }}
                 </label>
@@ -116,7 +118,7 @@
                 <input type="text" v-validate="'max:100'" class="control" id="custom_heading" name="custom_heading" value="" data-vv-as="&quot;{{ __('velocity::app.admin.contents.content.custom-heading') }}&quot;"/>
 
                 <span class="control-error" v-if="errors.has('custom_heading')">@{{ errors.first('custom_heading') }}</span>
-            </div>
+            </div> --}}
 
             <div class="control-group" :class="[errors.has('content_type') ? 'has-error' : '']">
                 <label for="content_type" class="required">{{ __('velocity::app.admin.contents.content.content-type') }}</label>
@@ -141,11 +143,14 @@
             <div v-else-if="content_type == 'static'">
                 @include ('velocity::admin.content.content-type.static')
             </div>
+            <div v-else-if="content_type == 'category'">
+                @include ('velocity::admin.content.content-type.category')
+            </div>
         </div>
 
     </script>
 
-    <script>
+    <script type="text/javascript">
         Vue.component('content-type', {
             template: '#content-type-template',
 
@@ -158,10 +163,9 @@
             },
             methods: {
                 loadFields(event) {
-                    var thisthis = this;
-                    thisthis.content_type = event.target.value;
+                    this.content_type = event.target.value;
 
-                    if ( thisthis.content_type == 'static') {
+                    if (this.content_type == 'static') {
                         $(document).ready(function () {
                             tinymce.init({
                                 selector: 'textarea#description',

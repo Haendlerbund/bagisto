@@ -32,11 +32,11 @@
         type="button"
         id="mini-cart"
         @click="toggleMiniCart"
-        class="btn btn-link disable-box-shadow">
+        :class="`btn btn-link disable-box-shadow ${itemCount == 0 ? 'cursor-not-allowed' : ''}`">
 
         <div class="mini-cart-content">
             <i class="material-icons-outlined text-down-3">shopping_cart</i>
-            <span class="badge" v-text="itemCount"></span>
+            <span class="badge" v-text="itemCount" v-if="itemCount != 0"></span>
             <span class="fs18 fw6 cart-text">{{ __('velocity::app.minicart.cart') }}</span>
         </div>
         <div class="down-arrow-container">
@@ -98,7 +98,7 @@
 
                     <div class="btn-group full-width">
                         <div class="selectdiv">
-                            <select class="form-control fs13 styled-select" name="category">
+                            <select class="form-control fs13 styled-select" name="category" @change="focusInput($event)">
                                 <option value="">
                                     {{ __('velocity::app.header.all-categories') }}
                                 </option>
@@ -130,7 +130,7 @@
                                 name="term"
                                 type="search"
                                 class="form-control"
-                                :value="searchedQuery.term"
+                                :value="searchedQuery.term ? searchedQuery.term.split('+').join(' ') : ''"
                                 placeholder="{{ __('velocity::app.header.search-text') }}" />
 
                             <button class="btn" type="submit" id="header-search-icon">
@@ -503,7 +503,7 @@
                     <a
                         v-text="content.title"
                         :href="`${$root.baseUrl}/${content['page_link']}`"
-                        v-if="(content['content_type'] == 'link')"
+                        v-if="(content['content_type'] == 'link' || content['content_type'] == 'category')"
                         :target="content['link_target'] ? '_blank' : '_self'">
                     </a>
                 </li>
@@ -559,6 +559,10 @@
                     let modal = $('#cart-modal-content')[0];
                     if (modal)
                         modal.classList.toggle('hide');
+
+                    let accountModal = $('.account-modal')[0];
+                    if (accountModal)
+                        accountModal.classList.add('hide');
 
                     event.stopPropagation();
                 }
@@ -656,6 +660,12 @@
 
                 this.searchedQuery = updatedSearchedCollection;
             },
+
+            methods: {
+                'focusInput': function (event) {
+                    $(event.target.parentElement.parentElement).find('input').focus();
+                }
+            }
         })
 
         Vue.component('content-header', {
