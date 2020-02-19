@@ -12,7 +12,7 @@ return [
         'reviews' => 'Reviews',
         'wishlist' => 'Wishlist',
         'orders' => 'Orders',
-        'downloadable-products' => 'Downloadable Products',
+        'downloadable-products' => 'Downloadable Products'
     ],
 
     'common' => [
@@ -87,7 +87,7 @@ return [
         'star' => 'Star',
         'percentage' => ':percentage %',
         'id-star' => 'star',
-        'name' => 'Name'
+        'name' => 'Name',
     ],
 
     'customer' => [
@@ -187,6 +187,9 @@ return [
                 'fname' => 'First Name',
                 'lname' => 'Last Name',
                 'gender' => 'Gender',
+                'other' => 'Other',
+                'male' => 'Male',
+                'female' => 'Female',
                 'dob' => 'Date Of Birth',
                 'phone' => 'Phone',
                 'email' => 'Email',
@@ -224,6 +227,7 @@ return [
                     'first_name' => 'First name',
                     'last_name' => 'Last name',
                     'vat_id' => 'Vat id',
+                    'vat_help_note' => '[Note: Use Country Code with VAT Id. Eg. INV01234567891]',
                     'title' => 'Add Address',
                     'street-address' => 'Street Address',
                     'country' => 'Country',

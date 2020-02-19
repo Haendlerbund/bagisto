@@ -220,6 +220,27 @@ body {
             .modal-footer {
                 justify-content: unset;
             }
+
+            .modal-content {
+                top: 0;
+                padding: 0;
+
+                ul {
+                    li {
+                        &:hover {
+                            background-color: $border-light;
+                        }
+
+                        a {
+                            padding: 10px 20px;
+                        }
+
+                        &:last-child {
+                            margin-bottom: 5px;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -242,6 +263,8 @@ body {
 
     .locale-switcher {
         padding-left: 5px;
+        position: relative;
+        padding-right: 15px;
     }
 
     .dropdown {
@@ -249,7 +272,7 @@ body {
 
         .select-icon-container {
             .select-icon {
-                right: -8px;
+                right: 0;
             }
         }
     }
@@ -374,7 +397,6 @@ header {
         height: 40px;
         margin: 5px 0px;
         background: $white-color;
-        padding: 4px 1px 0px 0px;
 
         * {
             height: 100%;
@@ -391,6 +413,8 @@ header {
                     right: 8px;
                     z-index: 10;
                     font-size: 18px;
+                    background-color: $white-color;
+                    height: 20px;
                 }
             }
 
@@ -455,24 +479,34 @@ header {
 
     .mini-cart-container {
         height: 50px;
-        padding: 5px 22px;
+        padding: 5px 17px;
 
         #mini-cart {
             .mini-cart-content {
-                width: 75px;
                 font-size: 16px;
                 font-weight: 600;
                 text-align: right;
+                margin-right: 7px;
                 letter-spacing: 0;
                 position: relative;
                 color: $font-color;
                 display: inline-block;
 
-                .material-icons {
-                    left: 0px;
-                    top: 0px;
-                    font-size: 26px;
-                    position: absolute;
+                i {
+                    + span.cart-text {
+                        padding-left: 0px;
+                        vertical-align: text-bottom;
+                    }
+                }
+
+                .cart-text {
+                    padding-left: 5px;
+                }
+
+                + .down-arrow-container {
+                    .rango-arrow-down {
+                        top: 8px;
+                    }
                 }
             }
         }

@@ -21,7 +21,7 @@
                         </style>
                     @endpush
 
-                    <div class="row">
+                    <div class="row ltr">
                         <div class="col-9 no-padding carousel-products vc-full-screen with-recent-viewed" v-if="!isMobileDevice">
                             <carousel-component
                                 slides-per-page="5"
@@ -65,7 +65,6 @@
                         @include ('shop::products.list.recently-viewed', [
                             'quantity'          => 3,
                             'addClass'          => 'col-lg-3 col-md-12',
-                            'addClassWrapper'   => 'scrollable max-height-350',
                         ])
                     </div>
                 @else

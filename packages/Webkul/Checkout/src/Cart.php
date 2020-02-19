@@ -168,9 +168,10 @@ class Cart {
                     if (isset($cartProduct['parent_id']) && $cartItem->parent_id != $parentCartItem->id) {
                         $cartItem = $this->cartItemRepository->create(array_merge($cartProduct, ['cart_id' => $cart->id]));
                     } else {
-                        if ($product->getTypeInstance()->showQuantityBox() === false) {
+                        if ($cartItem->product->getTypeInstance()->showQuantityBox() === false) {
                             return ['warning' => __('shop::app.checkout.cart.integrity.qty_impossible')];
                         }
+
                         $cartItem = $this->cartItemRepository->update($cartProduct, $cartItem->id);
                     }
                 }
@@ -737,8 +738,11 @@ class Cart {
                 foreach ($taxRates as $rate) {
                     $haveTaxRate = false;
 
-                    if ($rate->state != '' && $rate->state != $address->state)
+                    if ($rate->state != '' && $rate->state != $address->state) {
+                        $this->setItemTaxToZero($item);
+
                         continue;
+                    }
 
                     if (! $rate->is_zip) {
                         if ($rate->zip_code == '*' || $rate->zip_code == $address->postcode)
@@ -755,16 +759,29 @@ class Cart {
 
                         $item->save();
                         break;
+                    } else {
+                        $this->setItemTaxToZero($item);
+
+                        break;
                     }
                 }
             } else {
-                $item->tax_percent = 0;
-                $item->tax_amount = 0;
-                $item->base_tax_amount = 0;
-
-                $item->save();
+                $this->setItemTaxToZero($item);
             }
         }
+    }
+
+    /**
+     * Set Item tax to zero.
+     *
+     * @return void
+     */
+    protected function setItemTaxToZero($item) {
+        $item->tax_percent = 0;
+        $item->tax_amount = 0;
+        $item->base_tax_amount = 0;
+
+        $item->save();
     }
 
     /**
@@ -972,7 +989,12 @@ class Cart {
         $found = false;
 
         foreach ($wishlistItems as $wishlistItem) {
-            if ($cartItem->product->getTypeInstance()->compareOptions($cartItem->additional, $wishlistItem->item_options))
+            $options = $wishlistItem->item_options;
+
+            if (! $options)
+                $options = ['product_id' => $wishlistItem->product_id];
+
+            if ($cartItem->product->getTypeInstance()->compareOptions($cartItem->additional, $options))
                 $found = true;
         }
 

@@ -5,6 +5,12 @@
 @endsection
 
 @section('page-detail-wrapper')
+    @if ($addresses->isEmpty())
+        <a href="{{ route('customer.address.create') }}" class="theme-btn light unset pull-right">
+            {{ __('shop::app.customer.account.address.index.add') }}
+        </a>
+    @endif
+
     <div class="account-head">
         <span class="back-icon"><a href="{{ route('customer.account.index') }}"><i class="icon icon-menu-back"></i></a></span>
         <span class="account-heading">{{ __('shop::app.customer.account.address.index.title') }}</span>
@@ -25,19 +31,16 @@
         <div class="account-table-content">
             @if ($addresses->isEmpty())
                 <div>{{ __('shop::app.customer.account.address.index.empty') }}</div>
-                <a href="{{ route('customer.address.create') }}" class="theme-btn light unset pull-right">
-                    {{ __('shop::app.customer.account.address.index.add') }}
-                </a>
             @else
                 <div class="address-holder col-12 no-padding">
                     @foreach ($addresses as $address)
                         <div class="col-lg-4 col-md-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title fw6">{{ auth()->guard('customer')->user()->name }} {{ $address->name }}</h5>
+                                    <h5 class="card-title fw6">{{ $address->first_name }} {{ $address->last_name }}</h5>
 
                                     <ul type="none">
-                                        {{-- <li>{{ $address->name }}</li> --}}
+                                        {{-- <li>{{ $address->company_name }}</li> --}}
                                         <li>{{ $address->address1 }},</li>
                                         <li>{{ $address->city }},</li>
                                         <li>{{ $address->state }},</li>

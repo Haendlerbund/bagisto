@@ -139,9 +139,9 @@ return [
     'datagrid' => [
         'mass-ops' => [
             'method-error' => 'Error! Wrong method detected, please check mass action configuration',
-            'delete-success' => 'Selected index of :resource were successfully deleted',
+            'delete-success' => 'Selected :resource were successfully deleted',
             'partial-action' => 'Some actions were not performed due restricted system constraints on :resource',
-            'update-success' => 'Selected index of :resource were successfully updated',
+            'update-success' => 'Selected :resource were successfully updated',
             'no-resource' => 'The resource provided for insufficient for the action'
         ],
 
@@ -421,7 +421,7 @@ return [
             'adjustment-refund' => 'Adjustment Refund',
             'adjustment-fee' => 'Adjustment Fee',
             'update-qty' => 'Update Quantities',
-            'invalid-qty' => 'Found invalid quantity for return items.',
+            'invalid-qty' => 'We found an invalid quantity to refund items.',
             'refund-limit-error' => 'The most money available to refund is :amount.',
             'refunded' => 'Refunded',
             'date' => 'Refund Date',
@@ -465,8 +465,8 @@ return [
             'add-variant-title' => 'Add Variant',
             'variant-already-exist-message' => 'Variant with same attribute options already exists.',
             'add-image-btn-title' => 'Add Image',
-            'mass-delete-success' => 'All the selected index of products have been deleted successfully',
-            'mass-update-success' => 'All the selected index of products have been updated successfully',
+            'mass-delete-success' => 'All the selected products have been deleted successfully',
+            'mass-update-success' => 'All the selected products have been updated successfully',
             'configurable-error' => 'Please select atleast one configurable attribute.',
             'categories' => 'Categories',
             'images' => 'Images',
@@ -1039,7 +1039,7 @@ return [
             'code-suffix' => 'Code Suffix',
             'generate' => 'Generate',
             'cart-rule-not-defind-error' => 'Cart rule is not defined',
-            'mass-delete-success' => 'All the selected index of coupons have been deleted successfully.',
+            'mass-delete-success' => 'All the selected coupons have been deleted successfully.',
             'end-other-rules' => 'End Other Rules',
             'children-categories' => 'Categories (Children Only)',
             'parent-categories' => 'Categories (Parent Only)',
@@ -1206,6 +1206,23 @@ return [
     ],
 
     'admin' => [
+        'emails' => [
+            'email' => 'Email',
+            'notification_label' => 'Notifications',
+            'notifications' => [
+                'verification' => 'Send verification E-mail',
+                'registration' => 'Send registration E-mail',
+                'customer' => 'Send customer E-mail',
+                'new-order' => 'Send Order Confirmation E-mail',
+                'new-admin' => 'Send Admin Invitation E-mail',
+                'new-invoice' => 'Send Invoice Confirmation E-mail',
+                'new-refund' => 'Send Refund Notification E-mail',
+                'new-shipment' => 'Send Shipment Notification E-mail',
+                'new-inventory-source' => 'Send Inventory Source Notification E-mail',
+                'cancel-order' => 'Send cancel Order Notification E-mail',
+            ],
+
+        ],
         'system' => [
             'catalog' => 'Catalog',
             'products' => 'Products',

@@ -10,6 +10,7 @@ namespace Webkul\Customer\Rules;
  * @see     https://raw.githubusercontent.com/danielebarbaro/laravel-vat-eu-validator
  *
  * @package Danielebarbaro\LaravelVatEuValidator
+ * @author  Vivek Sharma <viveksh047@webkul.com> @vivek-webkul
  */
 class VatValidator
 {
@@ -21,6 +22,7 @@ class VatValidator
      */
     protected static $pattern_expression = array(
         'AT' => 'U[A-Z\d]{8}',
+        'AE' => '\d{15}',
         'BE' => '(0\d{9}|\d{10})',
         'BG' => '\d{9,10}',
         'CY' => '\d{8}[A-Z]',
@@ -36,6 +38,7 @@ class VatValidator
         'HR' => '\d{11}',
         'HU' => '\d{8}',
         'IE' => '[A-Z\d]{8}|[A-Z\d]{9}',
+        'IN' => 'V\d{11}',
         'IT' => '\d{11}',
         'LT' => '(\d{9}|\d{12})',
         'LU' => '\d{8}',
@@ -48,6 +51,7 @@ class VatValidator
         'SE' => '\d{12}',
         'SI' => '\d{8}',
         'SK' => '\d{10}',
+        'JP' => '\d{12}|\d{13}',
     );
 
     /**
@@ -65,7 +69,7 @@ class VatValidator
         if (! isset(self::$pattern_expression[$country])) {
             return false;
         }
-
+        
         return preg_match('/^' . self::$pattern_expression[$country] . '$/', $number) > 0;
     }
 

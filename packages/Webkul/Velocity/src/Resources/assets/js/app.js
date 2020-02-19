@@ -32,29 +32,33 @@ window.Carousel = VueCarousel;
 // UI components
 Vue.component("vue-slider", require("vue-slider-component"));
 Vue.component('modal-component', require('./UI/components/modal'));
+Vue.component("add-to-cart", require("./UI/components/add-to-cart"));
 Vue.component('quantity-btn', require('./UI/components/quantity-btn'));
 Vue.component('sidebar-component', require('./UI/components/sidebar'));
 Vue.component("product-card", require("./UI/components/product-card"));
 Vue.component("wishlist-component", require("./UI/components/wishlist"));
 Vue.component('carousel-component', require('./UI/components/carousel'));
 Vue.component('child-sidebar', require('./UI/components/child-sidebar'));
-Vue.component('card-list-content', require('./UI/components/card-list'));
 Vue.component('card-list-header', require('./UI/components/card-header'));
 Vue.component('magnify-image', require('./UI/components/image-magnifier'));
 Vue.component('responsive-sidebar', require('./UI/components/responsive-sidebar'));
+Vue.component('product-quick-view', require('./UI/components/product-quick-view'));
+Vue.component('product-quick-view-btn', require('./UI/components/product-quick-view-btn'));
 
 window.eventBus = new Vue();
 
 $(document).ready(function () {
     // define a mixin object
+    Vue.mixin(require('./UI/components/trans'));
     Vue.mixin({
         data: function () {
             return {
-                'baseUrl': document.querySelector("script[src$='velocity.js']").getAttribute('baseurl'),
+                'baseUrl': document.querySelector("script[src$='velocity.js']").getAttribute('baseUrl'),
                 'navContainer': false,
                 'responsiveSidebarTemplate': '',
                 'responsiveSidebarKey': Math.random(),
                 'sharedRootCategories': [],
+                'imageObserver': null,
             }
         },
 
@@ -160,6 +164,8 @@ $(document).ready(function () {
         data: function () {
             return {
                 modalIds: {},
+                quickView: false,
+                productDetails: [],
             }
         },
 
@@ -174,10 +180,15 @@ $(document).ready(function () {
         },
 
         mounted: function () {
+            setTimeout(() => {
+                this.addServerErrors();
+            }, 0);
+
             document.body.style.display = "block";
             this.$validator.localize(document.documentElement.lang);
 
             this.loadCategories();
+            this.addIntersectionObserver();
         },
 
         methods: {
@@ -223,6 +234,7 @@ $(document).ready(function () {
                         name: inputName,
                         scope: scope
                     });
+
                     if (field) {
                         this.$validator.errors.add({
                             id: field.id,
@@ -257,10 +269,22 @@ $(document).ready(function () {
                 .catch(error => {
                     console.log('failed to load categories');
                 })
+            },
+
+            addIntersectionObserver: function () {
+                this.imageObserver = new IntersectionObserver((entries, imgObserver) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const lazyImage = entry.target
+                            lazyImage.src = lazyImage.dataset.src
+                        }
+                    })
+                });
             }
         }
     });
 
+    // for compilation of html coming from server
     Vue.component('vnode-injector', {
         functional: true,
         props: ['nodes'],

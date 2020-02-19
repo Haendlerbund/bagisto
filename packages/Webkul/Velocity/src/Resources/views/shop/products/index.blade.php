@@ -14,6 +14,11 @@
 
 @push('css')
     <style type="text/css">
+        .product-price span:first-child, .product-price span:last-child {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
         @media only screen and (max-width: 992px) {
             .main-content-wrapper .vc-header {
                 box-shadow: unset;
@@ -56,16 +61,16 @@
                     @endif
                 </div>
 
-                {{-- <div class="col-6">
-                    <div class="hero-image mb-35">
+                <div class="col-12">
+                    <div class="hero-image">
                         @if (!is_null($category->image))
                             <img class="logo" src="{{ $category->image_url }}" />
                         @endif
                     </div>
-                </div> --}}
+                </div>
             </div>
 
-            <div class="filters-container" v-if="isMobile()">
+            <div class="filters-container">
                 @include ('shop::products.list.toolbar')
             </div>
 
@@ -74,12 +79,6 @@
                 @if ($category->display_mode == 'description_only')
                     style="width: 100%"
                 @endif>
-
-                <div class="hero-image mb-35">
-                    @if (!is_null($category->image))
-                        {{-- <img class="logo" src="{{ $category->image_url }}" /> --}}
-                    @endif
-                </div>
 
                 @if ($isDisplayMode)
                     @if ($products->count())

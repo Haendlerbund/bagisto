@@ -11,12 +11,21 @@
     <cart-component></cart-component>
 @endsection
 
+@push('css')
+    <style type="text/css">
+        .quantity {
+            width: unset;
+            float: right;
+        }
+    </style>
+@endpush
+
 @push('scripts')
     @include('shop::checkout.cart.coupon')
 
     <script type="text/x-template" id="cart-template">
         <div class="container">
-            <section class="cart-details row offset-1 col-12">
+            <section class="cart-details row no-margin col-12">
                 <h1 class="fw6 col-12">{{ __('shop::app.checkout.cart.title') }}</h1>
 
                 @if ($cart)
@@ -26,7 +35,7 @@
                                 {{ __('velocity::app.checkout.items') }}
                             </span>
 
-                            <span class="col-2 fw6 fs16 no-padding text-center">
+                            <span class="col-2 fw6 fs16 no-padding text-right">
                                 {{ __('velocity::app.checkout.qty') }}
                             </span>
 
@@ -67,17 +76,30 @@
                                             </a>
 
                                             <div class="product-details-content col-6">
-                                                <div class="row">
+                                                <div class="row item-title no-margin">
                                                     <a
                                                         href="{{ route('shop.productOrCategory.index', $product->url_key) }}"
                                                         title="{{ $product->name }}"
-                                                        class="unset col-12">
+                                                        class="unset col-12 no-padding">
 
                                                         <span class="fs20 fw6 link-color">{{ $product->name }}</span>
                                                     </a>
                                                 </div>
 
-                                                <div class="row col-12">
+                                                @if (isset($item->additional['attributes']))
+                                                    @foreach ($item->additional['attributes'] as $attribute)
+                                                        <div class="row col-12 no-padding no-margin display-block">
+                                                            <label class="no-margin">
+                                                                {{ $attribute['attribute_name'] }} :
+                                                            </label>
+                                                            <span>
+                                                                {{ $attribute['option_label'] }}
+                                                            </span>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+
+                                                <div class="row col-12 no-padding no-margin">
                                                     @include ('shop::products.price', ['product' => $product])
                                                 </div>
 
@@ -95,7 +117,7 @@
                                                                 </wishlist-component>
 
                                                                 <span class="align-vertical-top">
-                                                                    {{ __('shop::app.layouts.wishlist') }}
+                                                                    {{ __('shop::app.checkout.cart.move-to-wishlist') }}
                                                                 </span>
                                                             </a>
                                                         @else
@@ -117,7 +139,11 @@
                                                     @endauth
 
                                                     <a
-                                                        class="unset ml30"
+                                                        class="unset
+                                                            @auth('customer')
+                                                                ml10
+                                                            @endauth
+                                                        "
                                                         href="{{ route('shop.checkout.cart.remove', ['id' => $item->id]) }}"
                                                         onclick="removeLink('{{ __('shop::app.checkout.cart.cart-remove-action') }}')">
 
@@ -153,7 +179,7 @@
                                                     alt="{{ $product->name }}">
                                             </a>
 
-                                            <div class="col-10 pr0">
+                                            <div class="col-10 pr0 item-title">
                                                 <a
                                                     href="{{ route('shop.productOrCategory.index', $product->url_key) }}"
                                                     title="{{ $product->name }}"
@@ -161,6 +187,16 @@
 
                                                     <span class="fs20 fw6 link-color">{{ $product->name }}</span>
                                                 </a>
+
+                                                @if (isset($item->additional['attributes']))
+                                                    <div class="row col-12 no-padding no-margin">
+
+                                                        @foreach ($item->additional['attributes'] as $attribute)
+                                                            <b>{{ $attribute['attribute_name'] }} : </b>{{ $attribute['option_label'] }}</br>
+                                                        @endforeach
+
+                                                    </div>
+                                                @endif
 
                                                 <div class="col-12 no-padding">
                                                     @include ('shop::products.price', ['product' => $product])
@@ -211,7 +247,7 @@
                 {!! view_render_event('bagisto.shop.checkout.cart.summary.after', ['cart' => $cart]) !!}
 
                     @if ($cart)
-                        <div class="col-lg-4 col-md-12 offset-1 row order-summary-container">
+                        <div class="col-lg-4 col-md-12 offset-2 row order-summary-container">
                             @include('shop::checkout.total.summary', ['cart' => $cart])
 
                             <coupon-component></coupon-component>

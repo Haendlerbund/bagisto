@@ -4,6 +4,8 @@ namespace Webkul\Shop\Http\Controllers;
 
 use Webkul\Customer\Repositories\WishlistRepository;
 use Webkul\Product\Repositories\ProductRepository;
+use Webkul\Checkout\Contracts\Cart as CartModel;
+use Illuminate\Support\Facades\Event;
 use Cart;
 
 /**
@@ -16,13 +18,6 @@ use Cart;
  */
 class CartController extends Controller
 {
-    /**
-     * Contains route related configuration
-     *
-     * @var array
-     */
-    protected $_config;
-
     /**
      * WishlistRepository Repository object
      *
@@ -55,7 +50,7 @@ class CartController extends Controller
 
         $this->productRepository = $productRepository;
 
-        $this->_config = request('_config');
+        parent::__construct();
     }
 
     /**
@@ -85,14 +80,16 @@ class CartController extends Controller
                 return redirect()->back();
             }
 
-            if ($result instanceof Cart) {
+            if ($result instanceof CartModel) {
                 session()->flash('success', trans('shop::app.checkout.cart.item.success'));
 
                 if ($customer = auth()->guard('customer')->user())
                     $this->wishlistRepository->deleteWhere(['product_id' => $id, 'customer_id' => $customer->id]);
 
-                if (request()->get('is_buy_now'))
+                if (request()->get('is_buy_now')) {
+                    Event::dispatch('shop.item.buy-now', $id);
                     return redirect()->route('shop.checkout.onepage.index');
+                }
             }
         } catch(\Exception $e) {
             session()->flash('error', trans($e->getMessage()));
