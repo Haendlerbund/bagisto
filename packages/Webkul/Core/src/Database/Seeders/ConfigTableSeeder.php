@@ -76,7 +76,7 @@ class ConfigTableSeeder extends Seeder
 
         DB::table('core_config')->insert([
             'id'           => 7,
-            'code'         => 'emails.general.notifications.emails.general.notifications.new-invoice',
+            'code'         => 'emails.general.notifications.emails.general.notifications.new-payment',
             'value'        => '1',
             'channel_code' => null,
             'locale_code'  => null,
@@ -86,7 +86,7 @@ class ConfigTableSeeder extends Seeder
 
         DB::table('core_config')->insert([
             'id'           => 8,
-            'code'         => 'emails.general.notifications.emails.general.notifications.new-refund',
+            'code'         => 'emails.general.notifications.emails.general.notifications.new-payment-admin',
             'value'        => '1',
             'channel_code' => null,
             'locale_code'  => null,
@@ -96,7 +96,7 @@ class ConfigTableSeeder extends Seeder
 
         DB::table('core_config')->insert([
             'id'           => 9,
-            'code'         => 'emails.general.notifications.emails.general.notifications.new-shipment',
+            'code'         => 'emails.general.notifications.emails.general.notifications.new-invoice',
             'value'        => '1',
             'channel_code' => null,
             'locale_code'  => null,
@@ -104,9 +104,10 @@ class ConfigTableSeeder extends Seeder
             'updated_at'   => $now,
         ]);
 
+
         DB::table('core_config')->insert([
             'id'           => 10,
-            'code'         => 'emails.general.notifications.emails.general.notifications.new-inventory-source',
+            'code'         => 'emails.general.notifications.emails.general.notifications.new-refund',
             'value'        => '1',
             'channel_code' => null,
             'locale_code'  => null,
@@ -116,6 +117,26 @@ class ConfigTableSeeder extends Seeder
 
         DB::table('core_config')->insert([
             'id'           => 11,
+            'code'         => 'emails.general.notifications.emails.general.notifications.new-shipment',
+            'value'        => '1',
+            'channel_code' => null,
+            'locale_code'  => null,
+            'created_at'   => $now,
+            'updated_at'   => $now,
+        ]);
+
+        DB::table('core_config')->insert([
+            'id'           => 12,
+            'code'         => 'emails.general.notifications.emails.general.notifications.new-inventory-source',
+            'value'        => '1',
+            'channel_code' => null,
+            'locale_code'  => null,
+            'created_at'   => $now,
+            'updated_at'   => $now,
+        ]);
+
+        DB::table('core_config')->insert([
+            'id'           => 13,
             'code'         => 'emails.general.notifications.emails.general.notifications.cancel-order',
             'value'        => '1',
             'channel_code' => null,

@@ -207,6 +207,16 @@ return [
                 'type'  => 'boolean',
             ],
             [
+                'name'  => 'emails.general.notifications.new-payment',
+                'title' => 'admin::app.admin.emails.notifications.new-payment',
+                'type'  => 'boolean',
+            ],
+            [
+                'name'  => 'emails.general.notifications.new-payment-admin',
+                'title' => 'admin::app.admin.emails.notifications.new-payment-admin',
+                'type'  => 'boolean',
+            ],
+            [
                 'name'  => 'emails.general.notifications.new-invoice',
                 'title' => 'admin::app.admin.emails.notifications.new-invoice',
                 'type'  => 'boolean',
